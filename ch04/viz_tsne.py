@@ -16,6 +16,7 @@ def visualize_tsne(
     pkl_file,
     output_file="cbow_tsne.png",
     query_words=[],
+    query_words_answer=[],
     analogy_words=[],
     analogy_word_keys=[],
     analogy_word_keys_answer=[],
@@ -29,6 +30,9 @@ def visualize_tsne(
 
     # 단어 벡터 추출
     query_indices = [word_to_id[word] for word in query_words if word in word_to_id]
+    query_indices_answer = [
+        word_to_id[word] for word in query_words_answer if word in word_to_id
+    ]
     analogy_indices = [word_to_id[word] for word in analogy_words if word in word_to_id]
     key_indices = [
         word_to_id[word]
@@ -44,13 +48,19 @@ def visualize_tsne(
         if word in word_to_id
     ]
 
-    all_indices = query_indices + analogy_indices + key_indices + key_indices_answer
+    all_indices = (
+        query_indices
+        + query_indices_answer
+        + analogy_indices
+        + key_indices
+        + key_indices_answer
+    )
     selected_vectors = word_vecs[all_indices]
     selected_labels = [id_to_word[i] for i in all_indices]
 
     # 색상 지정
     selected_colors = (
-        ["blue"] * len(query_indices)
+        ["blue"] * len(query_indices)["orange"] * len(query_indices_answer)
         + ["red"] * len(analogy_indices)
         + ["green"] * len(key_indices)
         + ["purple"] * len(key_indices_answer)
@@ -79,10 +89,6 @@ def visualize_tsne(
 
 
 query_words = [
-    "you",
-    "year",
-    "car",
-    "toyota",
     "yourself",
     "i",
     "we",
@@ -109,6 +115,13 @@ query_words = [
     "nissan",
     "infiniti",
     "lexus",
+]
+
+query_words_answer = [
+    "you",
+    "year",
+    "car",
+    "toyota",
 ]
 
 analogy_word_keys = [
@@ -169,17 +182,19 @@ pkl_file = "cbow_params.pkl"  # 또는 'skipgram_params.pkl'
 visualize_tsne(
     pkl_file,
     "cbow_tsne.png",
-    query_words=[],
-    analogy_words=analogy_words,
-    analogy_word_keys=analogy_word_keys,
-    analogy_word_keys_answer=analogy_word_keys_answer,
+    query_words=query_words,
+    query_words_answer=query_words_answer,
+    analogy_words=[],
+    analogy_word_keys=[],
+    analogy_word_keys_answer=[],
 )
 pkl_file = "skip_gram_params.pkl"
 visualize_tsne(
     pkl_file,
     "skip_gram_tsne.png",
-    query_words=[],
-    analogy_words=analogy_words,
-    analogy_word_keys=analogy_word_keys,
-    analogy_word_keys_answer=analogy_word_keys_answer,
+    query_words=query_words,
+    query_words_answer=query_words_answer,
+    analogy_words=[],
+    analogy_word_keys=[],
+    analogy_word_keys_answer=[],
 )
