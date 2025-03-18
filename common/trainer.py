@@ -7,6 +7,7 @@ import time
 import matplotlib.pyplot as plt
 from common.np import *  # import numpy as np
 from common.util import clip_grads, cast_to_single_value
+import wandb
 
 
 class Trainer:
