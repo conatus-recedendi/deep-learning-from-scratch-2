@@ -28,6 +28,7 @@ wandb.init(
         "model": {"value": "Better_RNNLM"},
         "max_grad": {"value": 0.25},
         "dropout": {"value": 0.5},
+        "is_weight_typing": {"value": True},
         "model_params": {
             "value": {
                 "hidden_size": 650,
@@ -60,6 +61,7 @@ model = BetterRnnlm(
     wandb.config.model_params["wordvec_size"],
     wandb.config.model_params["hidden_size"],
     wandb.config.dropout,
+    is_weight_typing=wandb.config.is_weight_typing,
 )
 optimizer = SGD(wandb.config.learning_rate)
 trainer = RnnlmTrainer(model, optimizer)

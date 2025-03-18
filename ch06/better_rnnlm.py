@@ -1,46 +1,110 @@
 # coding: utf-8
 import sys
-sys.path.append('..')
+
+sys.path.append("..")
 from common.time_layers import *
 from common.np import *  # import numpy as np
 from common.base_model import BaseModel
 
 
 class BetterRnnlm(BaseModel):
-    '''
-     LSTM 계층을 2개 사용하고 각 층에 드롭아웃을 적용한 모델이다.
-     아래 [1]에서 제안한 모델을 기초로 하였고, [2]와 [3]의 가중치 공유(weight tying)를 적용했다.
+    """
+    LSTM 계층을 2개 사용하고 각 층에 드롭아웃을 적용한 모델이다.
+    아래 [1]에서 제안한 모델을 기초로 하였고, [2]와 [3]의 가중치 공유(weight tying)를 적용했다.
 
-     [1] Recurrent Neural Network Regularization (https://arxiv.org/abs/1409.2329)
-     [2] Using the Output Embedding to Improve Language Models (https://arxiv.org/abs/1608.05859)
-     [3] Tying Word Vectors and Word Classifiers (https://arxiv.org/pdf/1611.01462.pdf)
-    '''
-    def __init__(self, vocab_size=10000, wordvec_size=650,
-                 hidden_size=650, dropout_ratio=0.5):
+    [1] Recurrent Neural Network Regularization (https://arxiv.org/abs/1409.2329)
+    [2] Using the Output Embedding to Improve Language Models (https://arxiv.org/abs/1608.05859)
+    [3] Tying Word Vectors and Word Classifiers (https://arxiv.org/pdf/1611.01462.pdf)
+    """
+
+    def __init__(
+        self,
+        vocab_size=10000,
+        wordvec_size=650,
+        hidden_size=650,
+        dropout_ratio=0.5,
+        is_weight_typing=True,
+        num_lstm_layer=2,
+    ):
         V, D, H = vocab_size, wordvec_size, hidden_size
         rn = np.random.randn
 
-        embed_W = (rn(V, D) / 100).astype('f')
-        lstm_Wx1 = (rn(D, 4 * H) / np.sqrt(D)).astype('f')
-        lstm_Wh1 = (rn(H, 4 * H) / np.sqrt(H)).astype('f')
-        lstm_b1 = np.zeros(4 * H).astype('f')
-        lstm_Wx2 = (rn(H, 4 * H) / np.sqrt(H)).astype('f')
-        lstm_Wh2 = (rn(H, 4 * H) / np.sqrt(H)).astype('f')
-        lstm_b2 = np.zeros(4 * H).astype('f')
-        affine_b = np.zeros(V).astype('f')
+        if num_lstm_layer == 2:
+            embed_W = (rn(V, D) / 100).astype("f")
+            lstm_Wx1 = (rn(D, 4 * H) / np.sqrt(D)).astype("f")
+            lstm_Wh1 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_b1 = np.zeros(4 * H).astype("f")
+            lstm_Wx2 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_Wh2 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_b2 = np.zeros(4 * H).astype("f")
+            affine_b = np.zeros(V).astype("f")
 
-        self.layers = [
-            TimeEmbedding(embed_W),
-            TimeDropout(dropout_ratio),
-            TimeLSTM(lstm_Wx1, lstm_Wh1, lstm_b1, stateful=True),
-            TimeDropout(dropout_ratio),
-            TimeLSTM(lstm_Wx2, lstm_Wh2, lstm_b2, stateful=True),
-            TimeDropout(dropout_ratio),
-            TimeAffine(embed_W.T, affine_b)  # weight tying!!
-        ]
-        self.loss_layer = TimeSoftmaxWithLoss()
-        self.lstm_layers = [self.layers[2], self.layers[4]]
-        self.drop_layers = [self.layers[1], self.layers[3], self.layers[5]]
+            if is_weight_typing:
+                embed_last_W = embed_W
+            else:
+                embed_last_W = (rn(V, D) / 100).astype("f")
+
+            self.layers = [
+                TimeEmbedding(embed_W),
+                TimeDropout(dropout_ratio),
+                TimeLSTM(lstm_Wx1, lstm_Wh1, lstm_b1, stateful=True),
+                TimeDropout(dropout_ratio),
+                TimeLSTM(lstm_Wx2, lstm_Wh2, lstm_b2, stateful=True),
+                TimeDropout(dropout_ratio),
+                TimeAffine(embed_last_W.T, affine_b),  # weight tying!!
+            ]
+            self.loss_layer = TimeSoftmaxWithLoss()
+            self.lstm_layers = [self.layers[2], self.layers[4]]
+            self.drop_layers = [self.layers[1], self.layers[3], self.layers[5]]
+
+        elif num_lstm_layer == 4:
+            embed_W = (rn(V, D) / 100).astype("f")
+            lstm_Wx1 = (rn(D, 4 * H) / np.sqrt(D)).astype("f")
+            lstm_Wh1 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_b1 = np.zeros(4 * H).astype("f")
+            lstm_Wx2 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_Wh2 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_b2 = np.zeros(4 * H).astype("f")
+            lstm_Wx3 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_Wh3 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_b3 = np.zeros(4 * H).astype("f")
+            lstm_Wx4 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_Wh4 = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+            lstm_b4 = np.zeros(4 * H).astype("f")
+            affine_b = np.zeros(V).astype("f")
+
+            if is_weight_typing:
+                embed_last_W = embed_W
+            else:
+                embed_last_W = (rn(V, D) / 100).astype("f")
+
+            self.layers = [
+                TimeEmbedding(embed_W),
+                TimeDropout(dropout_ratio),
+                TimeLSTM(lstm_Wx1, lstm_Wh1, lstm_b1, stateful=True),
+                TimeDropout(dropout_ratio),
+                TimeLSTM(lstm_Wx2, lstm_Wh2, lstm_b2, stateful=True),
+                TimeDropout(dropout_ratio),
+                TimeLSTM(lstm_Wx3, lstm_Wh3, lstm_b3, stateful=True),
+                TimeDropout(dropout_ratio),
+                TimeLSTM(lstm_Wx4, lstm_Wh4, lstm_b4, stateful=True),
+                TimeDropout(dropout_ratio),
+                TimeAffine(embed_last_W.T, affine_b),  # weight tying!!
+            ]
+            self.loss_layer = TimeSoftmaxWithLoss()
+            self.lstm_layers = [
+                self.layers[2],
+                self.layers[4],
+                self.layers[6],
+                self.layers[8],
+            ]
+            self.drop_layers = [
+                self.layers[1],
+                self.layers[3],
+                self.layers[5],
+                self.layers[7],
+                self.layers[9],
+            ]
 
         self.params, self.grads = [], []
         for layer in self.layers:
