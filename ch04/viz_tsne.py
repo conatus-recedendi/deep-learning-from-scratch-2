@@ -109,22 +109,14 @@ analogy_word_keys = [
     ["good", "better"],
 ]
 
+analogy_word_keys_answer = [
+    ["queen", "woman"],
+    ["go", "went"],
+    ["child", "children"],
+    ["bad", "worse"],
+]
+
 analogy_words = [
-    "king",
-    "man",
-    "queen",
-    "take",
-    "took",
-    "go",
-    "went",
-    "car",
-    "cars",
-    "child",
-    "children",
-    "good",
-    "better",
-    "bad",
-    "worse",
     "peace",
     "freeway",
     "bikers",
@@ -132,7 +124,6 @@ analogy_words = [
     "born",
     "a.m",
     "fbi",
-    "woman",
     "brother",
     "answers",
     "pricings",
