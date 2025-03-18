@@ -18,6 +18,7 @@ def visualize_tsne(
     query_words=[],
     analogy_words=[],
     analogy_word_keys=[],
+    analogy_word_keys_answer=[]
     seed=1000,
 ):
     params = load_model(pkl_file)
@@ -36,7 +37,14 @@ def visualize_tsne(
         if word in word_to_id
     ]
 
-    all_indices = query_indices + analogy_indices + key_indices
+    key_indices_answer = [
+        word_to_id[word]
+        for pair in analogy_word_keys_answer
+        for word in pair
+        if word in word_to_id
+    ]
+
+    all_indices = query_indices + analogy_indices + key_indices + key_indices_answer
     selected_vectors = word_vecs[all_indices]
     selected_labels = [id_to_word[i] for i in all_indices]
 
@@ -45,6 +53,7 @@ def visualize_tsne(
         ["blue"] * len(query_indices)
         + ["red"] * len(analogy_indices)
         + ["green"] * len(key_indices)
+        + ["purple"] * len(key_indices_answer)
     )
 
     # t-SNE 적용
@@ -163,6 +172,7 @@ visualize_tsne(
     query_words=[],
     analogy_words=analogy_words,
     analogy_word_keys=analogy_word_keys,
+    analogy_word_keys_answer=analogy_word_keys_answer,
 )
 pkl_file = "skip_gram_params.pkl"
 visualize_tsne(
@@ -171,4 +181,5 @@ visualize_tsne(
     query_words=[],
     analogy_words=analogy_words,
     analogy_word_keys=analogy_word_keys,
+    analogy_word_keys_answer=analogy_word_keys_answer,
 )
