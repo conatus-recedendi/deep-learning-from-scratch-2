@@ -69,6 +69,7 @@ optimizer = SGD(wandb.config.learning_rate)
 trainer = RnnlmTrainer(model, optimizer)
 
 best_ppl = float("inf")
+lr = wandb.config.learning_rate
 for epoch in range(wandb.config.epochs):
     trainer.fit(
         xs,
