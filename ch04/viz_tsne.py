@@ -18,7 +18,7 @@ def visualize_tsne(
     query_words=[],
     analogy_words=[],
     analogy_word_keys=[],
-    analogy_word_keys_answer=[]
+    analogy_word_keys_answer=[],
     seed=1000,
 ):
     params = load_model(pkl_file)
