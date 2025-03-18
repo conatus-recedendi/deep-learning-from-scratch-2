@@ -57,7 +57,7 @@ if config.GPU:
 model = Rnnlm(
     vocab_size,
     wandb.config.model_params["wordvec_size"],
-    wandb.config.model_parmas["hidden_size"],
+    wandb.config.model_params["hidden_size"],
 )
 optimizer = SGD(wandb.config.learning_rate)
 trainer = RnnlmTrainer(model, optimizer)
