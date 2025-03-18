@@ -23,29 +23,27 @@ wandb.init(
     project="Word2Vec",
     name="Negative_All_Sample_CBOW",
     config={
-        "parameters": {
-            "seed": {"value": 1000},
-            "gradient_descent": {"value": "Adam"},
-            "learning_rate": {"value": 0.001},
-            "epochs": {"value": 10},
-            "batch_size": {"value": 100},
-            "model": {"value": "Negative_All_Sample_CBOW"},
-            "model_params": {
-                "value": {
-                    "hidden_size": 100,
-                    "window_size": 5,
-                    "power": 0.75,
-                },
+        "seed": {"value": 1000},
+        "gradient_descent": {"value": "Adam"},
+        "learning_rate": {"value": 0.001},
+        "epochs": {"value": 10},
+        "batch_size": {"value": 100},
+        "model": {"value": "Negative_All_Sample_CBOW"},
+        "model_params": {
+            "value": {
+                "hidden_size": 100,
+                "window_size": 5,
+                "power": 0.75,
             },
-            "dataset": {"value": "PTB"},
-            "gpu": {"value": config.GPU},
-            # "batch_norm": {"value": False},
-            # "weight_decay_lambda": {"value": 0},
-            # "dataset": {"value": ""},
-            # "activation": {"value": "relu"},
-            # "weight_init_std": {"value": "he"},
-            # "dropout": {"value": 0.15},
         },
+        "dataset": {"value": "PTB"},
+        "gpu": {"value": config.GPU},
+        # "batch_norm": {"value": False},
+        # "weight_decay_lambda": {"value": 0},
+        # "dataset": {"value": ""},
+        # "activation": {"value": "relu"},
+        # "weight_init_std": {"value": "he"},
+        # "dropout": {"value": 0.15},},
     },
 )
 
