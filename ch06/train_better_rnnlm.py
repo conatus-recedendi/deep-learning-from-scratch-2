@@ -34,6 +34,7 @@ wandb.init(
                 "hidden_size": 650,
                 "wordvec_size": 650,
                 "time_size": 35,
+                "num_lstm_layer": 2,  # only 2, 4
             },
         },
         "dataset": {"value": "PTB"},
@@ -62,6 +63,7 @@ model = BetterRnnlm(
     wandb.config.model_params["hidden_size"],
     wandb.config.dropout,
     is_weight_typing=wandb.config.is_weight_typing,
+    num_lstm_layer=wandb.config.model_params["num_lstm_layer"],
 )
 optimizer = SGD(wandb.config.learning_rate)
 trainer = RnnlmTrainer(model, optimizer)
