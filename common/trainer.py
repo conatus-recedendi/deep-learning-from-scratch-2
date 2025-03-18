@@ -134,6 +134,7 @@ class RnnlmTrainer:
 
         start_time = time.time()
         for epoch in range(max_epoch):
+            ppl = 0
             for iters in range(max_iters):
                 batch_x, batch_t = self.get_batch(xs, ts, batch_size, time_size)
 
@@ -166,6 +167,13 @@ class RnnlmTrainer:
                     self.ppl_list.append(float(ppl))
                     total_loss, loss_count = 0, 0
 
+            wandb.log(
+                {
+                    "Perplexity": cast_to_single_value(ppl),
+                    # "train_acc": cast_to_single_value(acc_train),
+                    # "test_acc": cast_to_single_value(acc_test),
+                }
+            )
             self.current_epoch += 1
 
     def plot(self, ylim=None):
