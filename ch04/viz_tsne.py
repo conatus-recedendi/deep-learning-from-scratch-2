@@ -12,7 +12,7 @@ def load_model(pkl_file):
 
 
 # t-SNE 변환 및 시각화
-def visualize_tsne(pkl_file, num_words=200):
+def visualize_tsne(pkl_file, output_file="cbow_tsne.png", num_words=200):
     params = load_model(pkl_file)
     word_vecs = params["word_vecs"]
     id_to_word = params["id_to_word"]
@@ -37,9 +37,10 @@ def visualize_tsne(pkl_file, num_words=200):
         )
 
     plt.title("t-SNE Word Vector Visualization")
+    plt.savefig(output_file, dpi=300)
     plt.show()
 
 
 # 사용 예시 (파일명 변경 필요)
 pkl_file = "cbow_params.pkl"  # 또는 'skipgram_params.pkl'
-visualize_tsne(pkl_file)
+visualize_tsne(pkl_file, "cbow_tsne.png")
