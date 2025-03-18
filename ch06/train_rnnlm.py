@@ -6,7 +6,7 @@ sys.path.append("..")
 from common import config
 from common.optimizer import SGD
 from common.trainer import RnnlmTrainer
-from common.util import eval_perplexity, to_gpu
+from common.util import eval_perplexity, to_gpu, cast_to_single_value
 from dataset import ptb
 from rnnlm import Rnnlm
 import wandb
@@ -77,7 +77,7 @@ trainer.plot(ylim=(0, 500))
 # 테스트 데이터로 평가
 model.reset_state()
 ppl_test = eval_perplexity(model, corpus_test)
-wandb.log({"Test Perplexity": ppl_test})
+wandb.log({"Test Perplexity": cast_to_single_value(ppl_test)})
 print("테스트 퍼플렉서티: ", ppl_test)
 
 # 매개변수 저장

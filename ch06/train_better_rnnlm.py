@@ -10,7 +10,7 @@ config.GPU = True
 # ==============================================
 from common.optimizer import SGD
 from common.trainer import RnnlmTrainer
-from common.util import eval_perplexity, to_gpu
+from common.util import eval_perplexity, to_gpu, cast_to_single_value
 from dataset import ptb
 from better_rnnlm import BetterRnnlm
 
@@ -78,7 +78,7 @@ for epoch in range(wandb.config.epochs):
     model.reset_state()
     ppl = eval_perplexity(model, corpus_val)
     print("검증 퍼플렉서티: ", ppl)
-    wandb.log({"Validation Perplexity": ppl})
+    wandb.log({"Validation Perplexity": cast_to_single_value(ppl)})
 
     if best_ppl > ppl:
         best_ppl = ppl
@@ -95,4 +95,4 @@ for epoch in range(wandb.config.epochs):
 model.reset_state()
 ppl_test = eval_perplexity(model, corpus_test)
 print("테스트 퍼플렉서티: ", ppl_test)
-wandb.log({"Test Perplexity": ppl_test})
+wandb.log({"Test Perplexity": cast_to_single_value(ppl_test)})

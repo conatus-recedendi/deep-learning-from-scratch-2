@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from dataset import sequence
 from common.optimizer import Adam
 from common.trainer import Trainer
-from common.util import eval_seq2seq
+from common.util import eval_seq2seq, cast_to_single_value
 from seq2seq import Seq2seq
 from peeky_seq2seq import PeekySeq2seq
 import wandb
@@ -87,7 +87,7 @@ for epoch in range(wandb.config.epochs):
     acc_list.append(acc)
     wandb.log(
         {
-            "Test Accuracy": acc,
+            "Test Accuracy": cast_to_single_value(acc),
         }
     )
     print("검증 정확도 %.3f%%" % (acc * 100))
