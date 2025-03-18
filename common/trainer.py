@@ -135,6 +135,7 @@ class RnnlmTrainer:
         start_time = time.time()
         for epoch in range(max_epoch):
             ppl = 0
+            loss = 0
             for iters in range(max_iters):
                 batch_x, batch_t = self.get_batch(xs, ts, batch_size, time_size)
 
