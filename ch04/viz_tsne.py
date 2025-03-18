@@ -48,7 +48,7 @@ def visualize_tsne(
     )
 
     # t-SNE 적용
-    tsne = TSNE(n_components=2, perplexity=30, random_state=42)
+    tsne = TSNE(n_components=2, perplexity=5, random_state=42)
     reduced_vectors = tsne.fit_transform(selected_vectors)
 
     # 시각화
