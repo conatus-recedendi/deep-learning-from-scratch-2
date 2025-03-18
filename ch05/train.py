@@ -30,6 +30,7 @@ wandb.init(
         },
         "dataset": {"value": "PTB-1000"},
         "gpu": {"value": False},
+        "baseline": True,
     },
 )
 
