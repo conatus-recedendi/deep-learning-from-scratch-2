@@ -169,7 +169,7 @@ pkl_file = "cbow_params.pkl"  # 또는 'skipgram_params.pkl'
 visualize_tsne(
     pkl_file,
     "cbow_tsne.png",
-    query_words=query_words,
+    query_words=[],
     analogy_words=analogy_words,
     analogy_word_keys=analogy_word_keys,
 )
@@ -177,7 +177,7 @@ pkl_file = "skip_gram_params.pkl"
 visualize_tsne(
     pkl_file,
     "skip_gram_tsne.png",
-    query_words=query_words,
+    query_words=[],
     analogy_words=analogy_words,
     analogy_word_keys=analogy_word_keys,
 )
