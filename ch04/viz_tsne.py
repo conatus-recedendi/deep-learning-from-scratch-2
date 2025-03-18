@@ -44,6 +44,6 @@ def visualize_tsne(pkl_file, output_file="cbow_tsne.png", num_words=200, seed=10
 
 # 사용 예시 (파일명 변경 필요)
 pkl_file = "cbow_params.pkl"  # 또는 'skipgram_params.pkl'
-visualize_tsne(pkl_file, "cbow_tsne.png")
+visualize_tsne(pkl_file, "cbow_tsne.png", 40)
 pkl_file = "skip_gram_params.pkl"
-visualize_tsne(pkl_file, "skip_gram_tsne.png")
+visualize_tsne(pkl_file, "skip_gram_tsne.png", 40)
