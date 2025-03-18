@@ -12,10 +12,11 @@ def load_model(pkl_file):
 
 
 # t-SNE 변환 및 시각화
-def visualize_tsne(pkl_file, output_file="cbow_tsne.png", num_words=200):
+def visualize_tsne(pkl_file, output_file="cbow_tsne.png", num_words=200, seed=1000):
     params = load_model(pkl_file)
     word_vecs = params["word_vecs"]
     id_to_word = params["id_to_word"]
+    np.random.seed(seed)
 
     # 일부 단어만 선택 (너무 많으면 시각화가 어려움)
     selected_indices = np.random.choice(len(word_vecs), num_words, replace=False)
@@ -44,3 +45,5 @@ def visualize_tsne(pkl_file, output_file="cbow_tsne.png", num_words=200):
 # 사용 예시 (파일명 변경 필요)
 pkl_file = "cbow_params.pkl"  # 또는 'skipgram_params.pkl'
 visualize_tsne(pkl_file, "cbow_tsne.png")
+pkl_file = "skip_gram_params.pkl"
+visualize_tsne(pkl_file, "skip_gram_tsne.png")
