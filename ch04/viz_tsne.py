@@ -60,7 +60,8 @@ def visualize_tsne(
 
     # 색상 지정
     selected_colors = (
-        ["blue"] * len(query_indices)["orange"] * len(query_indices_answer)
+        ["blue"] * len(query_indices)
+        + ["orange"] * len(query_indices_answer)
         + ["red"] * len(analogy_indices)
         + ["green"] * len(key_indices)
         + ["purple"] * len(key_indices_answer)
