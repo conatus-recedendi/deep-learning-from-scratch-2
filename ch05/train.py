@@ -28,7 +28,7 @@ wandb.init(
                 "power": 0.75,
             },
         },
-        "dataset": {"value": "PTB-1000"},
+        "dataset": {"value": "PTB"},
         "gpu": {"value": False},
         "baseline": True,
     },
@@ -36,7 +36,7 @@ wandb.init(
 
 # 학습 데이터 읽기
 corpus, word_to_id, id_to_word = ptb.load_data("train")
-corpus_size = 1000  # 테스트 데이터셋을 작게 설정
+corpus_size = len(corpus)  # 테스트 데이터셋을 작게 설정
 corpus = corpus[:corpus_size]
 vocab_size = int(max(corpus) + 1)
 xs = corpus[:-1]  # 입력
