@@ -44,8 +44,8 @@ ts = corpus[1:]  # 출력（정답 레이블）
 # 모델 생성
 model = SimpleRnnlm(
     wandb.config.model_params["vocab_size"],
-    wandb.config.model_params.["wordvec_size"],
-    wandb.config.model_params.["hidden_size"],
+    wandb.config.model_params["wordvec_size"],
+    wandb.config.model_params["hidden_size"],
 )
 optimizer = SGD(wandb.config.learning_rate)
 trainer = RnnlmTrainer(model, optimizer)
