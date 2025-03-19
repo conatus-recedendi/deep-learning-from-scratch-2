@@ -3,10 +3,10 @@ import sys
 
 sys.path.append("..")
 from common import config
-import numpy as np
 
 config.GPU = True
 import matplotlib.pyplot as plt
+from common.np import *
 from dataset import sequence
 from common.optimizer import Adam
 from common.trainer import Trainer
