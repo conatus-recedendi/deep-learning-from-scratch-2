@@ -4,6 +4,8 @@ import sys
 sys.path.append("..")
 from common import config
 import numpy as np
+
+config.GPU = True
 import matplotlib.pyplot as plt
 from dataset import sequence
 from common.optimizer import Adam
@@ -13,8 +15,6 @@ from seq2seq import Seq2seq
 from peeky_seq2seq import PeekySeq2seq
 import wandb
 
-
-config.GPU = True
 
 wandb.init(
     project="RNN",
