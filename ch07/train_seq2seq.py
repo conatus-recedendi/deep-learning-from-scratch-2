@@ -8,10 +8,11 @@ import matplotlib.pyplot as plt
 from dataset import sequence
 from common.optimizer import Adam
 from common.trainer import Trainer
-from common.util import eval_seq2seq, cast_to_single_value
+from common.util import eval_seq2seq, cast_to_single_value, to_gpu
 from seq2seq import Seq2seq
 from peeky_seq2seq import PeekySeq2seq
 import wandb
+
 
 config.GPU = True
 
@@ -19,22 +20,21 @@ wandb.init(
     project="RNN",
     name="seq2seq",
     config={
-        "seed": {"value": 1000},
-        "gradient_descent": {"value": "SGD"},
-        "learning_rate": {"value": 5.0},
-        "epochs": {"value": 25},
+        "seed": 1000,
+        "gradient_descent": "SGD",
+        "learning_rate": 5.0,
+        "epochs": 25,
         "batch_size": 128,
-        "model": {"value": "seq2seq"},
-        "max_grad": {"value": 0.25},
-        "is_reverse": {"value": False},
+        "model": "seq2seq",
+        "max_grad": 0.25,
+        "is_reverse": False,
+        "is_peeky": False,
         "model_params": {
-            "value": {
-                "hidden_size": 128,
-                "wordvec_size": 16,
-            },
+            "hidden_size": 128,
+            "wordvec_size": 16,
         },
-        "dataset": {"value": "addition"},
-        "gpu": {"value": True},
+        "dataset": "addition",
+        "gpu": True,
         "baseline": True,
     },
 )
@@ -50,16 +50,26 @@ if is_reverse:
     x_train, x_test = x_train[:, ::-1], x_test[:, ::-1]
 # ================================================================
 
+if config.GPU:
+    x_train, t_train = to_gpu(x_train), to_gpu(t_train)
+    x_test, t_test = to_gpu(x_test), to_gpu(t_test)
 
 # 하이퍼파라미터 설정
 vocab_size = len(char_to_id)
 
 # 일반 혹은 엿보기(Peeky) 설정 =====================================
-model = Seq2seq(
-    vocab_size,
-    wandb.config.model_params["wordvec_size"],
-    wandb.config.model_params["hidden_size"],
-)
+if wandb.config.is_peeky:
+    model = PeekySeq2seq(
+        vocab_size,
+        wandb.config.model_params["wordvec_size"],
+        wandb.config.model_params["hidden_size"],
+    )
+else:
+    model = Seq2seq(
+        vocab_size,
+        wandb.config.model_params["wordvec_size"],
+        wandb.config.model_params["hidden_size"],
+    )
 # model = PeekySeq2seq(vocab_size, wordvec_size, hidden_size)
 # ================================================================
 optimizer = Adam()
