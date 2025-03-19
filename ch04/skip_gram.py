@@ -1,6 +1,8 @@
 # coding: utf-8
 import sys
-sys.path.append('..')  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
+
+sys.path.append("..")  # 부모 디렉터리의 파일을 가져올 수 있도록 설정
+from common.np import *
 from common.layers import *
 from ch04.negative_sampling_layer import NegativeSamplingLoss
 
@@ -11,8 +13,8 @@ class SkipGram:
         rn = np.random.randn
 
         # 가중치 초기화
-        W_in = 0.01 * rn(V, H).astype('f')
-        W_out = 0.01 * rn(V, H).astype('f')
+        W_in = 0.01 * rn(V, H).astype("f")
+        W_out = 0.01 * rn(V, H).astype("f")
 
         # 계층 생성
         self.in_layer = Embedding(W_in)
