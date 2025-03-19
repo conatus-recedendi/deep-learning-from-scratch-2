@@ -54,7 +54,6 @@ class UnigramSampler:
 
     def get_negative_sample(self, target):
         batch_size = target.shape[0]
-
         if not GPU:
             negative_sample = np.zeros((batch_size, self.sample_size), dtype=np.int32)
 
