@@ -21,22 +21,20 @@ wandb.init(
     project="RNN",
     name="RNNLM",
     config={
-        "seed": {"value": 1000},
-        "gradient_descent": {"value": "SGD"},
-        "learning_rate": {"value": 20},
-        "epochs": {"value": 4},
+        "seed": 1000,
+        "gradient_descent": "SGD",
+        "learning_rate": 20,
+        "epochs": 4,
         "batch_size": 20,
-        "model": {"value": "RNNLM"},
-        "max_grad": {"value": 0.25},
+        "model": "RNNLM",
+        "max_grad": 0.25,
         "model_params": {
-            "value": {
-                "hidden_size": 100,
-                "wordvec_size": 100,
-                "time_size": 35,
-            },
+            "hidden_size": 100,
+            "wordvec_size": 100,
+            "time_size": 35,
         },
-        "dataset": {"value": "PTB"},
-        "gpu": {"value": True},
+        "dataset": "PTB",
+        "gpu": True,
         "baseline": True,
     },
 )
@@ -46,12 +44,12 @@ wandb.init(
 corpus, word_to_id, id_to_word = ptb.load_data("train")
 corpus_test, _, _ = ptb.load_data("test")
 vocab_size = len(word_to_id)
-xs = corpus[:-1]
-ts = corpus[1:]
-
 if config.GPU:
     corpus = to_gpu(corpus)
     corpus_test = to_gpu(corpus_test)
+xs = corpus[:-1]
+ts = corpus[1:]
+
 
 # 모델 생성
 model = Rnnlm(
