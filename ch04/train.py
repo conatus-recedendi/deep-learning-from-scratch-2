@@ -21,14 +21,14 @@ import wandb
 
 wandb.init(
     project="Word2Vec",
-    name="Negative_All_Sample_CBOW",
+    name="skip-gram",
     config={
         "seed": {"value": 1000},
         "gradient_descent": {"value": "Adam"},
         "learning_rate": {"value": 0.001},
         "epochs": {"value": 10},
         "batch_size": {"value": 100},
-        "model": {"value": "Negative_All_Sample_CBOW"},
+        "model": {"value": "skip-gram"},
         "model_params": {
             "value": {
                 "hidden_size": 100,
@@ -38,6 +38,7 @@ wandb.init(
         },
         "dataset": {"value": "PTB"},
         "gpu": {"value": config.GPU},
+        "baseline": {"value": True},
         # "batch_norm": {"value": False},
         # "weight_decay_lambda": {"value": 0},
         # "dataset": {"value": ""},
@@ -60,7 +61,14 @@ if config.GPU:
     contexts, target = to_gpu(contexts), to_gpu(target)
 
 # 모델 등 생성
-model = CBOW(
+# model = CBOW(
+#     vocab_size,
+#     hidden_size=wandb.config.model_params["hidden_size"],
+#     window_size=wandb.config.model_params["window_size"],
+#     corpus=corpus,
+# )
+
+model = SkipGram(
     vocab_size,
     hidden_size=wandb.config.model_params["hidden_size"],
     window_size=wandb.config.model_params["window_size"],
@@ -84,6 +92,6 @@ params = {}
 params["word_vecs"] = word_vecs.astype(np.float16)
 params["word_to_id"] = word_to_id
 params["id_to_word"] = id_to_word
-pkl_file = "cbow_params.pkl"  # or 'skipgram_params.pkl'
+pkl_file = "skip_gram_params.pkl"  # or 'skipgram_params.pkl'
 with open(pkl_file, "wb") as f:
     pickle.dump(params, f, -1)
