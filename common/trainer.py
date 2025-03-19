@@ -4,8 +4,10 @@ import sys
 sys.path.append("..")
 import time
 import matplotlib.pyplot as plt
+
+from common import config
 from common.np import *  # import numpy as np
-from common.util import clip_grads, cast_to_single_value
+from common.util import clip_grads, cast_to_single_value, to_cpu
 import wandb
 
 
@@ -178,6 +180,8 @@ class RnnlmTrainer:
 
     def plot(self, ylim=None):
         x = np.arange(len(self.ppl_list))
+        if config.GPU:
+            x = to_cpu(x)
         if ylim is not None:
             plt.ylim(*ylim)
         plt.plot(x, self.ppl_list, label="train")
