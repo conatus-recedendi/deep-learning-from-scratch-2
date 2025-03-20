@@ -4,6 +4,8 @@ import sys
 
 sys.path.append("..")
 from common import config
+
+config.GPU = True
 from common.np import *
 from common.optimizer import SGD
 from common.trainer import RnnlmTrainer
@@ -14,7 +16,6 @@ import wandb
 
 # GPU에서 실행하려면 아래 주석을 해제하세요(CuPy 필요).
 # ==============================================
-config.GPU = True
 # ==============================================
 
 
