@@ -4,6 +4,7 @@ import sys
 
 sys.path.append("..")
 from common import config
+from common.np import *
 from common.optimizer import SGD
 from common.trainer import RnnlmTrainer
 from common.util import eval_perplexity, to_gpu, cast_to_single_value

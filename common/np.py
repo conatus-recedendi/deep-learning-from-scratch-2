@@ -13,3 +13,7 @@ if GPU:
     print("\033[92m" + "-" * 60 + "\033[0m\n")
 else:
     import numpy as np
+
+    print("\033[92m" + "-" * 60 + "\033[0m")
+    print(" " * 23 + "\033[92mCPU Mode (numpy)\033[0m")
+    print("\033[92m" + "-" * 60 + "\033[0m\n")
