@@ -1,8 +1,10 @@
 # coding: utf-8
 import sys
-sys.path.append('..')
+
+sys.path.append("..")
 from common.time_layers import *
 from common.base_model import BaseModel
+from common.np import *
 
 
 class Rnnlm(BaseModel):
@@ -11,18 +13,18 @@ class Rnnlm(BaseModel):
         rn = np.random.randn
 
         # 가중치 초기화
-        embed_W = (rn(V, D) / 100).astype('f')
-        lstm_Wx = (rn(D, 4 * H) / np.sqrt(D)).astype('f')
-        lstm_Wh = (rn(H, 4 * H) / np.sqrt(H)).astype('f')
-        lstm_b = np.zeros(4 * H).astype('f')
-        affine_W = (rn(H, V) / np.sqrt(H)).astype('f')
-        affine_b = np.zeros(V).astype('f')
+        embed_W = (rn(V, D) / 100).astype("f")
+        lstm_Wx = (rn(D, 4 * H) / np.sqrt(D)).astype("f")
+        lstm_Wh = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+        lstm_b = np.zeros(4 * H).astype("f")
+        affine_W = (rn(H, V) / np.sqrt(H)).astype("f")
+        affine_b = np.zeros(V).astype("f")
 
         # 계층 생성
         self.layers = [
             TimeEmbedding(embed_W),
             TimeLSTM(lstm_Wx, lstm_Wh, lstm_b, stateful=True),
-            TimeAffine(affine_W, affine_b)
+            TimeAffine(affine_W, affine_b),
         ]
         self.loss_layer = TimeSoftmaxWithLoss()
         self.lstm_layer = self.layers[1]
