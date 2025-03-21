@@ -97,7 +97,7 @@ for epoch in range(wandb.config.epochs):
     acc_list.append(acc)
     wandb.log(
         {
-            "Test Accuracy": cast_to_single_value(acc),
+            "Test Accuracy": cast_to_single_value(acc * 100),
         }
     )
     print("검증 정확도 %.3f%%" % (acc * 100))
