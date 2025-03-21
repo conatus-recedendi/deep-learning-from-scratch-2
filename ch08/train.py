@@ -20,7 +20,7 @@ import wandb
 
 wandb.init(
     project="RNN",
-    name="attention",
+    name="attention.date",
     config={
         "seed": 1000,
         "gradient_descent": "SGD",
@@ -35,7 +35,7 @@ wandb.init(
             "hidden_size": 128,
             "wordvec_size": 16,
         },
-        "dataset": "date",
+        "dataset": "date",  # | "addition"
         "gpu": True,
         "baseline": True,
     },
@@ -43,7 +43,7 @@ wandb.init(
 
 
 # 데이터 읽기
-(x_train, t_train), (x_test, t_test) = sequence.load_data("date.txt")
+(x_train, t_train), (x_test, t_test) = sequence.load_data(wandb.config.dataset + ".txt")
 char_to_id, id_to_char = sequence.get_vocab()
 
 # 입력 문장 반전
