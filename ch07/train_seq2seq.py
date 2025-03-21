@@ -103,9 +103,9 @@ for epoch in range(wandb.config.epochs):
     print("검증 정확도 %.3f%%" % (acc * 100))
 
 # 그래프 그리기
-x = np.arange(len(acc_list))
-plt.plot(x, acc_list, marker="o")
-plt.xlabel("에폭")
-plt.ylabel("정확도")
-plt.ylim(0, 1.0)
-plt.show()
+# x = np.arange(len(acc_list))
+# plt.plot(x, acc_list, marker="o")
+# plt.xlabel("에폭")
+# plt.ylabel("정확도")
+# plt.ylim(0, 1.0)
+# plt.show()

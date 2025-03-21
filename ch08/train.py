@@ -100,9 +100,9 @@ for epoch in range(wandb.config.epochs):
 model.save_params()
 
 # 그래프 그리기
-x = np.arange(len(acc_list))
-plt.plot(x, acc_list, marker="o")
-plt.xlabel("에폭")
-plt.ylabel("정확도")
-plt.ylim(-0.05, 1.05)
-plt.show()
+# x = np.arange(len(acc_list))
+# plt.plot(x, acc_list, marker="o")
+# plt.xlabel("에폭")
+# plt.ylabel("정확도")
+# plt.ylim(-0.05, 1.05)
+# plt.show()
