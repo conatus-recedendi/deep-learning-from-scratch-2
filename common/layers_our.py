@@ -3,6 +3,7 @@
 from common import config
 from common.np import *
 from common.functions import softmax, cross_entropy_error
+import time
 
 
 class MatMul:
@@ -115,17 +116,29 @@ class SigmoidWithLoss:
         self.t = None  # 정답 데이터
 
     def forward(self, x, t):
+        """
+        :param x: input data -> (batch_size, 1)
+        :param t: label data -> (batch_size, 1)
+        :return: loss -> float
+        """
         self.t = t
         self.y = 1 / (1 + np.exp(-x))
+        self.y = self.y.reshape(self.t.shape)
 
         self.loss = cross_entropy_error(np.c_[1 - self.y, self.y], self.t)
 
         return self.loss
 
     def backward(self, dout=1):
+        """
+        :param dout: loss -> float
+        :return: dx -> (batch_size, 1)
+        """
         batch_size = self.t.shape[0]
 
         dx = (self.y - self.t) * dout / batch_size
+        return dx
+
         return dx
 
 
@@ -156,21 +169,36 @@ class Embedding:
         self.grads = [np.zeros_like(W)]
         self.idx = None
 
+        self.time = {"forward": 0, "backward": 0}
+
     def forward(self, idx):
+        """
+        :param idx: index -> (batch_size, )
+        :return: word vector -> (batch_size, hidden_size)
+        """
+        start = time.perf_counter()
         (W,) = self.params
         self.idx = idx
-        out = W[idx]
-        return out
+        y = W[idx]
+        self.time["forward"] += time.perf_counter() - start
+        return y
 
     def backward(self, dout):
+        start = time.perf_counter()
+
         (dW,) = self.grads
         dW[...] = 0
         if config.GPU:
             import cupyx as xp
-        
+
             xp.scatter_add(dW, self.idx, dout)
         else:
             import numpy as np
 
             np.add.at(dW, self.idx, dout)
+        self.time["backward"] += time.perf_counter() - start
+
         return None
+
+    def memory_usage(self):
+        pass
