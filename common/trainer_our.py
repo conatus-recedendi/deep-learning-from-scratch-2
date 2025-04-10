@@ -39,7 +39,7 @@ class Trainer:
                 batch_t = sample_t[iters * batch_size : (iters + 1) * batch_size]
 
                 # 기울기 구해 매개변수 갱신
-                loss = model.loss(batch_x, batch_t)
+                loss = model.forward(batch_x, batch_t)
                 model.backward()
                 params, grads = remove_duplicate(
                     model.params, model.grads
@@ -49,7 +49,7 @@ class Trainer:
                 optimizer.update(params, grads)
                 total_loss += loss
                 loss_count += 1
-            acc_test = model.accuracy(x_test, t_test, batch_size)
+            # acc_test = model.accuracy(x_test, t_test, batch_size)
             acc_train = model.accuracy(sample_x, sample_t, batch_size)
             # acc_test = 0
             # acc_train = 0
