@@ -12,7 +12,7 @@ import pickle
 from common.trainer import Trainer
 from common.optimizer import Adam
 from cbow import CBOW
-from skip_gram import SkipGram
+from skip_gram_our import SkipGram
 from common.util import create_contexts_target, to_cpu, to_gpu
 from common.np import *
 from dataset import ptb
@@ -24,11 +24,11 @@ wandb.init(
     name="b_skip_gram",
     config={
         "seed": 1000,
-        "gradient_descent":  "Adam",
-        "learning_rate":  0.001,
+        "gradient_descent": "Adam",
+        "learning_rate": 0.001,
         "epochs": 1,
         "batch_size": 100,
-        "model":  "skip-gram",
+        "model": "skip-gram",
         "model_params": {
             "value": {
                 "hidden_size": 100,
@@ -61,12 +61,12 @@ if config.GPU:
     contexts, target = to_gpu(contexts), to_gpu(target)
 
 # 모델 등 생성
-#model = CBOW(
+# model = CBOW(
 #    vocab_size,
 #    hidden_size=wandb.config.model_params["hidden_size"],
 #    window_size=wandb.config.model_params["window_size"],
 #    corpus=corpus,
-#)
+# )
 
 model = SkipGram(
     vocab_size,
@@ -82,7 +82,7 @@ trainer = Trainer(model, optimizer)
 trainer.fit(
     contexts, target, max_epoch=wandb.config.epochs, batch_size=wandb.config.batch_size
 )
-#trainer.plot()
+# trainer.plot()
 for i in range(len(model.loss_layers)):
     print(f"loss_layer {i} : ", model.loss_layers[i].loss_cache)
 times = model.training_time()
