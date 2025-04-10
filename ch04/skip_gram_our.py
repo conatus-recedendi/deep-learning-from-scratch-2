@@ -64,15 +64,23 @@ class SkipGram:
 
         return h
 
-    def loss(self, contexts, target):
-        s = self.forward(contexts, target)
+    # def loss(self, contexts, target):
+    #     s = self.forward(contexts, target)
+    #     loss = 0
+    #     for i, layer in enumerate(self.loss_layers):
+    #         loss += layer.forward(s, contexts[:, i].reshape(-1))
+
+    #     # l1 = self.loss_layer_1.forward(s, contexts[:, 0])
+    #     # l2 = self.loss_layer_2.forward(s, contexts[:, 1])
+
+    #     return loss
+
+    def forward(self, contexts, target):
+        h = self.in_layer.forward(target)
+
         loss = 0
         for i, layer in enumerate(self.loss_layers):
-            loss += layer.forward(s, contexts[:, i].reshape(-1))
-
-        # l1 = self.loss_layer_1.forward(s, contexts[:, 0])
-        # l2 = self.loss_layer_2.forward(s, contexts[:, 1])
-
+            loss += layer.forward(h, contexts[:, i])
         return loss
 
     # def backward(self, dout=1):
