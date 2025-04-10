@@ -48,7 +48,6 @@ wandb.init(
     },
 )
 
-np.random.seed(wandb.config.seed)
 
 # 데이터 읽기
 corpus, word_to_id, id_to_word = ptb.load_data("train")
@@ -60,6 +59,7 @@ contexts, target = create_contexts_target(
 if config.GPU:
     contexts, target = to_gpu(contexts), to_gpu(target)
 
+np.random.seed(wandb.config.seed)
 # 모델 등 생성
 # model = CBOW(
 #    vocab_size,
@@ -79,7 +79,7 @@ model = SkipGram(
     corpus=corpus,
 )
 # model = SkipGram(vocab_size, hidden_size, window_size, corpus)
-optimizer = Adam()
+optimizer = Adam(lr=wandb.config.learning_rate)
 trainer = Trainer(model, optimizer)
 
 # 학습 시작
