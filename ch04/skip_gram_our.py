@@ -114,12 +114,13 @@ class SkipGram:
         total_forward = 0
         total_backward = 0
         for i, layer in enumerate(self.layers):
-            time_usage[f"Layer {i} ({layer.__class__.__name__})"] = {
-                "forward": layer.time["forward"],
-                "backward": layer.time["backward"],
-            }
-            total_forward += layer.time["forward"]
-            total_backward += layer.time["backward"]
+            if hasattr(layer, "time"):
+                time_usage[f"Layer {i} ({layer.__class__.__name__})"] = {
+                    "forward": layer.time["forward"],
+                    "backward": layer.time["backward"],
+                }
+                total_forward += layer.time["forward"]
+                total_backward += layer.time["backward"]
         time_usage["Total"] = {"forward": total_forward, "backward": total_backward}
         return time_usage
 
