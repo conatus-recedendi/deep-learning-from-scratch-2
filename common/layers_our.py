@@ -2,7 +2,7 @@
 # from common.np import *  # import numpy as np
 from common import config
 from common.np import *
-from common.functions import softmax, cross_entropy_error
+from common.functions_our import softmax, cross_entropy_error
 import time
 
 
