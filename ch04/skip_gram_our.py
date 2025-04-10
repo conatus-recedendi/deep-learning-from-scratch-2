@@ -5,7 +5,7 @@ sys.path.append("..")  # 부모 디렉터리의 파일을 가져올 수 있도�
 from common import config
 from common.np import *
 from common.layers import *
-from ch04.negative_sampling_layer import NegativeSamplingLoss
+from ch04.negative_sampling_layer_our import NegativeSamplingLoss
 import pickle
 
 
