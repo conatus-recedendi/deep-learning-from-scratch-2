@@ -40,6 +40,7 @@ class Trainer:
 
                 # 기울기 구해 매개변수 갱신
                 loss = model.forward(batch_x, batch_t)
+                print(loss)
                 model.backward()
                 params, grads = remove_duplicate(
                     model.params, model.grads
