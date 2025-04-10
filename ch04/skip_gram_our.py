@@ -75,17 +75,24 @@ class SkipGram:
 
         return loss
 
+    # def backward(self, dout=1):
+    #     dl = 0
+    #     for layer in self.loss_layers:
+    #         dl += layer.backward(dout)
+
+    #     # dl1 = self.loss_layer_1.backward(dout)
+    #     # dl2 = self.loss_layer_2.backward(dout)
+
+    #     ds = dl
+    #     # dh = self.out_layer.backward(ds)
+    #     self.in_layer.backward(ds)
+    #     return None
+
     def backward(self, dout=1):
-        dl = 0
-        for layer in self.loss_layers:
-            dl += layer.backward(dout)
-
-        # dl1 = self.loss_layer_1.backward(dout)
-        # dl2 = self.loss_layer_2.backward(dout)
-
-        ds = dl
-        # dh = self.out_layer.backward(ds)
-        self.in_layer.backward(ds)
+        dh = 0
+        for i, layer in enumerate(self.loss_layers):
+            dh += layer.backward(dout)
+        self.in_layer.backward(dh)
         return None
 
     def accuracy(self, x, target, batch_size=32):
