@@ -3,7 +3,7 @@ import wandb
 import pickle
 import time
 from common.np import *
-from common.utils import *
+from common.util import *
 
 
 class Trainer:
