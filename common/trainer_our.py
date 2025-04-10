@@ -7,7 +7,11 @@ from common.util import *
 
 
 class Trainer:
-    def __init__(self, model, optimizer, seed, output_name):
+    def __init__(
+        self,
+        model,
+        optimizer,
+    ):
         self.model = model
         self.optimizer = optimizer
         self.loss_list = []
