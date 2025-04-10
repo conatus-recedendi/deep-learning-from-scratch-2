@@ -63,12 +63,12 @@ class Trainer:
                         total_loss / (loss_count + 1e-7)
                     ),
                     "train_acc": cast_to_single_value(acc_train),
-                    "test_acc": cast_to_single_value(acc_test),
+                    # "test_acc": cast_to_single_value(acc_test),
                 }
             )
             self.loss_list.append(total_loss / (loss_count + 1e-7))
             self.train_acc_history.append(acc_train)
-            self.test_acc_history.append(acc_test)
+            # self.test_acc_history.append(acc_test)
             # last_saved_model = (
             #     f"{self.output_name}/output_seed={self.seed}_epoch={epoch-1}.pkl"
             # )
