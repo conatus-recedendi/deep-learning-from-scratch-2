@@ -9,7 +9,7 @@ from common import config
 config.GPU = True
 # ===============================================
 import pickle
-from common.trainer import Trainer
+from common.trainer_our import Trainer
 from common.optimizer import Adam
 from cbow import CBOW
 from skip_gram_our import SkipGram
