@@ -15,22 +15,42 @@ class EmbeddingDot:
         self.params = self.embed.params
         self.grads = self.embed.grads
         self.cache = None
+        self.time = {"forward": 0, "backward": 0}
 
-    def forward(self, h, idx):
-        target_W = self.embed.forward(idx)
-        out = np.sum(target_W * h, axis=1)
+    def forward(self, h, y):
+        """
+        :param h: hidden layer -> (batch_size, hidden_size)
+        :param y: label data -> (batch_size,)
+        :return: predicted result -> (batch_size, )
+        """
+        start = time.perf_counter()
 
-        self.cache = (h, target_W)
+        w = self.embed.forward(y)
+        out = np.sum(w * h, axis=1)
+        self.cache = (h, w)
+
+        self.time["forward"] += time.perf_counter() - start
         return out
 
     def backward(self, dout):
-        h, target_W = self.cache
-        dout = dout.reshape(dout.shape[0], 1)
+        """
+        :param dout: loss -> (batch_size, 1)
+        :return: gradient -> (batch_size, hidden_size)
+        """
 
-        dtarget_W = dout * h
-        self.embed.backward(dtarget_W)
-        dh = dout * target_W
+        start = time.perf_counter()
+        dout = dout.reshape(dout.shape[0], 1)
+        h, w = self.cache
+        dw = dout * h
+        self.embed.backward(dw)
+        dh = dout * w
+
+        self.time["backward"] += time.perf_counter() - start
+
         return dh
+
+    def memory_usage(self):
+        pass
 
 
 class UnigramSampler:
