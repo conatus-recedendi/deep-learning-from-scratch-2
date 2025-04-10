@@ -2,9 +2,9 @@
 import sys
 
 sys.path.append("..")
+from common import config
 import os
 from common.np import *
-from common.config import GPU
 
 
 def preprocess(text):
@@ -321,7 +321,7 @@ def cast_to_single_value(x):
     return: casted value
     """
 
-    if GPU:
+    if config.GPU:
 
         import cupy as np
 
