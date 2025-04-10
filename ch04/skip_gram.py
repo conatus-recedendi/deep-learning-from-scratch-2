@@ -24,9 +24,9 @@ class SkipGram:
             self.loss_layers.append(layer)
 
         # 모든 가중치와 기울기를 리스트에 모은다.
-        layers = [self.in_layer] + self.loss_layers
+        self.layers = [self.in_layer] + self.loss_layers
         self.params, self.grads = [], []
-        for layer in layers:
+        for layer in self.layers:
             self.params += layer.params
             self.grads += layer.grads
 
@@ -47,3 +47,18 @@ class SkipGram:
             dh += layer.backward(dout)
         self.in_layer.backward(dh)
         return None
+
+    def training_time(self):
+        time_usage = {}
+        total_forward = 0
+        total_backward = 0
+        for i, layer in enumerate(self.layers):
+            if hasattr(layer, "time"):
+                time_usage[f"Layer {i} ({layer.__class__.__name__})"] = {
+                    "forward": layer.time["forward"],
+                    "backward": layer.time["backward"],
+                }
+                total_forward += layer.time["forward"]
+                total_backward += layer.time["backward"]
+        time_usage["Total"] = {"forward": total_forward, "backward": total_backward}
+        return time_usage

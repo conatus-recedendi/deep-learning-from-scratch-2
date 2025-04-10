@@ -18,7 +18,7 @@ import wandb
 
 wandb.init(
     project="RNN",
-    name="Better_RNNLM",
+    name="Better_RNNLM w/o weight_typing",
     config={
         "seed": {"value": 1000},
         "gradient_descent": {"value": "SGD"},
@@ -28,7 +28,7 @@ wandb.init(
         "model": {"value": "Better_RNNLM"},
         "max_grad": {"value": 0.25},
         "dropout": {"value": 0.5},
-        "is_weight_typing": {"value": True},
+        "is_weight_typing": {"value": False},
         "model_params": {
             "value": {
                 "hidden_size": 650,

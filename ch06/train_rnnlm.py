@@ -26,7 +26,7 @@ wandb.init(
         "seed": 1000,
         "gradient_descent": "SGD",
         "learning_rate": 20,
-        "epochs": 4,
+        "epochs": 40,
         "batch_size": 20,
         "model": "RNNLM",
         "max_grad": 0.25,

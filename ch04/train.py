@@ -2,7 +2,6 @@
 import sys
 
 sys.path.append("..")
-import numpy as np
 from common import config
 
 # GPU에서 실행하려면 아래 주석을 해제하세요(CuPy 필요).
@@ -15,20 +14,21 @@ from common.optimizer import Adam
 from cbow import CBOW
 from skip_gram import SkipGram
 from common.util import create_contexts_target, to_cpu, to_gpu
+from common.np import *
 from dataset import ptb
 import wandb
-
+import json
 
 wandb.init(
     project="Word2Vec",
-    name="skip-gram",
+    name="b_skip_gram",
     config={
-        "seed": {"value": 1000},
-        "gradient_descent": {"value": "Adam"},
-        "learning_rate": {"value": 0.001},
-        "epochs": {"value": 10},
-        "batch_size": {"value": 100},
-        "model": {"value": "skip-gram"},
+        "seed": 1000,
+        "gradient_descent":  "Adam",
+        "learning_rate":  0.001,
+        "epochs": 1,
+        "batch_size": 100,
+        "model":  "skip-gram",
         "model_params": {
             "value": {
                 "hidden_size": 100,
@@ -36,9 +36,9 @@ wandb.init(
                 "power": 0.75,
             },
         },
-        "dataset": {"value": "PTB"},
-        "gpu": {"value": config.GPU},
-        "baseline": {"value": True},
+        "dataset": "PTB",
+        "gpu": config.GPU,
+        "baseline": True,
         # "batch_norm": {"value": False},
         # "weight_decay_lambda": {"value": 0},
         # "dataset": {"value": ""},
@@ -61,12 +61,12 @@ if config.GPU:
     contexts, target = to_gpu(contexts), to_gpu(target)
 
 # 모델 등 생성
-# model = CBOW(
-#     vocab_size,
-#     hidden_size=wandb.config.model_params["hidden_size"],
-#     window_size=wandb.config.model_params["window_size"],
-#     corpus=corpus,
-# )
+#model = CBOW(
+#    vocab_size,
+#    hidden_size=wandb.config.model_params["hidden_size"],
+#    window_size=wandb.config.model_params["window_size"],
+#    corpus=corpus,
+#)
 
 model = SkipGram(
     vocab_size,
@@ -82,8 +82,13 @@ trainer = Trainer(model, optimizer)
 trainer.fit(
     contexts, target, max_epoch=wandb.config.epochs, batch_size=wandb.config.batch_size
 )
-trainer.plot()
-
+#trainer.plot()
+for i in range(len(model.loss_layers)):
+    print(f"loss_layer {i} : ", model.loss_layers[i].loss_cache)
+times = model.training_time()
+with open("train_loss.txt", "w") as f:
+    for layer, timing in times.items():
+        f.write(f"{layer}: {json.dumps(timing)}\n")
 # 나중에 사용할 수 있도록 필요한 데이터 저장
 word_vecs = model.word_vecs
 if config.GPU:

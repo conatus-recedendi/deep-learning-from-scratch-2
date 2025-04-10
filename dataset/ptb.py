@@ -100,4 +100,8 @@ def load_data(data_type='train'):
 
 if __name__ == '__main__':
     for data_type in ('train', 'val', 'test'):
-        load_data(data_type)
+        corpus, word_to_id, id_to_word = load_data(data_type)
+
+
+        print("length of corpus: ", corpus.shape)
+        print("lenght of unique word: ", len(word_to_id))

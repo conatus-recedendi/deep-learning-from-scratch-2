@@ -18,7 +18,7 @@ import wandb
 
 wandb.init(
     project="RNN",
-    name="seq2seq",
+    name="seq2seq(reverse+peeky)",
     config={
         "seed": 1000,
         "gradient_descent": "SGD",
@@ -27,8 +27,8 @@ wandb.init(
         "batch_size": 128,
         "model": "seq2seq",
         "max_grad": 0.25,
-        "is_reverse": False,
-        "is_peeky": False,
+        "is_reverse": True,
+        "is_peeky": True,
         "model_params": {
             "hidden_size": 128,
             "wordvec_size": 16,

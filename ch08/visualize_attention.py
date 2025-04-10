@@ -8,7 +8,7 @@ from attention_seq2seq import AttentionSeq2seq
 
 
 (x_train, t_train), (x_test, t_test) = \
-    sequence.load_data('date.txt')
+    sequence.load_data('addition.txt')
 char_to_id, id_to_char = sequence.get_vocab()
 
 # 입력 문장 반전
@@ -36,9 +36,9 @@ def visualize(attention_map, row_labels, column_labels):
     global _idx
     _idx += 1
     plt.show()
+    plt.figsave("attention_" + _idx + "_addition.png")
 
 
-np.random.seed(1984)
 for _ in range(5):
     idx = [np.random.randint(0, len(x_test))]
     x = x_test[idx]

@@ -1,0 +1,11 @@
+Layer 1 (NegativeSamplingLoss): {"forward": 27.620339460670948, "backward": 9.238803116604686}
+Layer 2 (NegativeSamplingLoss): {"forward": 27.700682936236262, "backward": 9.03394633345306}
+Layer 3 (NegativeSamplingLoss): {"forward": 28.099313588812947, "backward": 8.959732973948121}
+Layer 4 (NegativeSamplingLoss): {"forward": 28.577246023342013, "backward": 8.938865443691611}
+Layer 5 (NegativeSamplingLoss): {"forward": 27.39281432889402, "backward": 8.938268193975091}
+Layer 6 (NegativeSamplingLoss): {"forward": 27.822532385587692, "backward": 8.910908341407776}
+Layer 7 (NegativeSamplingLoss): {"forward": 28.396806683391333, "backward": 8.893997713923454}
+Layer 8 (NegativeSamplingLoss): {"forward": 27.412180861458182, "backward": 8.912972444668412}
+Layer 9 (NegativeSamplingLoss): {"forward": 27.793897349387407, "backward": 8.892119100317359}
+Layer 10 (NegativeSamplingLoss): {"forward": 27.77658773213625, "backward": 8.891499385237694}
+Total: {"forward": 278.59240134991705, "backward": 89.61111304722726}

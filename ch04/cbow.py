@@ -22,9 +22,9 @@ class CBOW:
         self.ns_loss = NegativeSamplingLoss(W_out, corpus, power=0.75, sample_size=5)
 
         # 모든 가중치와 기울기를 배열에 모은다.
-        layers = self.in_layers + [self.ns_loss]
+        self.layers = self.in_layers + [self.ns_loss]
         self.params, self.grads = [], []
-        for layer in layers:
+        for layer in self.layers:
             self.params += layer.params
             self.grads += layer.grads
 

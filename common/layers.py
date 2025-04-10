@@ -1,6 +1,7 @@
 # coding: utf-8
-from common.np import *  # import numpy as np
-from common.config import GPU
+# from common.np import *  # import numpy as np
+from common import config
+from common.np import *
 from common.functions import softmax, cross_entropy_error
 
 
@@ -164,9 +165,9 @@ class Embedding:
     def backward(self, dout):
         (dW,) = self.grads
         dW[...] = 0
-        if GPU:
+        if config.GPU:
             import cupyx as xp
-
+        
             xp.scatter_add(dW, self.idx, dout)
         else:
             import numpy as np

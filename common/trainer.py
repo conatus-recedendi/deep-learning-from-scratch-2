@@ -22,6 +22,7 @@ class Trainer:
     def fit(self, x, t, max_epoch=10, batch_size=32, max_grad=None, eval_interval=20):
         data_size = len(x)
         max_iters = data_size // batch_size
+        print(data_size, batch_size, max_iters)
         self.eval_interval = eval_interval
         model, optimizer = self.model, self.optimizer
         total_loss = 0
@@ -30,7 +31,8 @@ class Trainer:
         start_time = time.time()
         for epoch in range(max_epoch):
             # 뒤섞기
-            avg_loss = 0
+            all_loss = 0
+            all_count = 0
             idx = np.random.permutation(np.arange(data_size))
             x = x[idx]
             t = t[idx]
@@ -48,9 +50,11 @@ class Trainer:
                 if max_grad is not None:
                     clip_grads(grads, max_grad)
                 optimizer.update(params, grads)
+                print("loss: ", loss)
                 total_loss += loss
                 loss_count += 1
-
+                all_loss += loss
+                all_count += 1
                 # 평가
                 if (eval_interval is not None) and (iters % eval_interval) == 0:
                     avg_loss = total_loss / loss_count
@@ -69,10 +73,11 @@ class Trainer:
                     total_loss, loss_count = 0, 0
 
             self.current_epoch += 1
-
+            avg_loss = all_loss / (all_count + 1e-7)
+            print(avg_loss, all_loss, all_count)
             wandb.log(
                 {
-                    "Loss": cast_to_single_value(avg_loss),
+                    "train_loss": cast_to_single_value(avg_loss),
                     # "train_acc": cast_to_single_value(acc_train),
                     # "test_acc": cast_to_single_value(acc_test),
                 }

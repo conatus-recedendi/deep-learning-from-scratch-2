@@ -20,7 +20,7 @@ import wandb
 
 wandb.init(
     project="RNN",
-    name="attention.date",
+    name="attention.addition",
     config={
         "seed": 1000,
         "gradient_descent": "SGD",
@@ -35,7 +35,7 @@ wandb.init(
             "hidden_size": 128,
             "wordvec_size": 16,
         },
-        "dataset": "date",  # | "addition"
+        "dataset": "addition",  # | "addition"
         "gpu": True,
         "baseline": True,
     },

@@ -40,10 +40,9 @@ class BaseModel:
 
         with open(file_name, 'rb') as f:
             params = pickle.load(f)
-
         params = [p.astype('f') for p in params]
         if GPU:
             params = [to_gpu(p) for p in params]
-
         for i, param in enumerate(self.params):
+            print(param.shape, params[i].shape)
             param[...] = params[i]
