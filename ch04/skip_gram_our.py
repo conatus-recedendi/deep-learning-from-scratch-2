@@ -43,7 +43,7 @@ class SkipGram:
 
         self.loss_layers = [
             NegativeSamplingLoss(
-                W_out=W_out,
+                W=W_out,
                 sample_size=self.sample_size,
                 corpus=corpus,
                 power=self.power,
