@@ -26,7 +26,7 @@ wandb.init(
         "seed": 1000,
         "gradient_descent": "Adam",
         "learning_rate": 0.001,
-        "epochs": 1,
+        "epochs": 10,
         "batch_size": 100,
         "model": "skip-gram",
         "model_params": {
