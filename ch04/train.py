@@ -12,8 +12,8 @@ import pickle
 from common.trainer_our import Trainer
 from common.optimizer_our import Adam
 from cbow import CBOW
-from skip_gram_our import SkipGram
-from common.util_our import create_contexts_target, to_cpu, to_gpu
+from skip_gram import SkipGram
+from common.util import create_contexts_target, to_cpu, to_gpu
 from common.np import *
 from dataset import ptb
 import wandb
