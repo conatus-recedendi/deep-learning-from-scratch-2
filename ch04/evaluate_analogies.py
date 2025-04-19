@@ -35,8 +35,9 @@ def find_top_k_similar(
 
 
 def evaluate_analogy(csv_path: str, model_path: str, top_k: int = 5):
+    print("start")
     word_vecs, word_to_id, id_to_word = load_model(model_path)
-
+    print("end load_model")
     total_correct = 0
     total_count = 0
 
@@ -49,6 +50,9 @@ def evaluate_analogy(csv_path: str, model_path: str, top_k: int = 5):
     with open(csv_path, newline="", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
+            print(
+                "row",
+            )
             if len(row) < 6:
                 continue
 
