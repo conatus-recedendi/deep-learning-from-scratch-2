@@ -35,9 +35,7 @@ def find_top_k_similar(
 
 
 def evaluate_analogy(csv_path: str, model_path: str, top_k: int = 5):
-    print("start")
     word_vecs, word_to_id, id_to_word = load_model(model_path)
-    print("end load_model")
     total_correct = 0
     total_count = 0
 
@@ -128,4 +126,23 @@ evaluate_analogy(
     "../dataset/google-analogies.csv",
     "./skip_gram_params.pkl",
     top_k=5,
+)
+
+evaluate_analogy(
+    "../dataset/google-analogies.csv",
+    "./skip_gram_params.pkl",
+    top_k=1,
+)
+
+evaluate_analogy(
+    "../dataset/google-analogies.csv",
+    "./cbow_params.pkl",
+    top_k=5,
+)
+
+
+evaluate_analogy(
+    "../dataset/google-analogies.csv",
+    "./cbow_params.pkl",
+    top_k=1,
 )
