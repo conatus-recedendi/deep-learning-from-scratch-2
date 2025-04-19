@@ -47,12 +47,13 @@ def evaluate_analogy(csv_path: str, model_path: str, top_k: int = 5):
     semantic_correct = 0
     semantic_count = 0
 
+    i = 0
     with open(csv_path, newline="", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
+
         for row in reader:
-            print(
-                "row",
-            )
+            i += 1
+            print(i)
             if len(row) < 6:
                 continue
 
