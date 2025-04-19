@@ -14,7 +14,9 @@ def load_model(pkl_file: str):
     with open(pkl_file, "rb") as f:
         params = pickle.load(f)
     # corpus, word_to_id, id_to_word = load_data("train")
-    word_vecs, word_to_id, id_to_word = params
+    word_vecs = params["word_vecs"]
+    word_to_id = params["word_to_id"]
+    id_to_word = params["id_to_word"]
     return word_vecs, word_to_id, id_to_word
 
 
