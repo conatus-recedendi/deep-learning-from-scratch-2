@@ -1,7 +1,7 @@
 # 코드 재실행: cbow 유추 평가 함수 정의
 import os, sys
 
-sys.path.append("../../")
+sys.path.append("../")
 import csv
 import pickle
 import numpy as np
