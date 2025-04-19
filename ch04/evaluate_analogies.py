@@ -13,8 +13,9 @@ def load_model(pkl_file: str):
     """cbow 모델 파라미터 불러오기"""
     with open(pkl_file, "rb") as f:
         params = pickle.load(f)
-    corpus, word_to_id, id_to_word = load_data("train")
-    return params[0], word_to_id, id_to_word
+    # corpus, word_to_id, id_to_word = load_data("train")
+    word_vecs, word_to_id, id_to_word = params
+    return word_vecs, word_to_id, id_to_word
 
 
 def cosine_similarity(x: np.ndarray, y: np.ndarray) -> float:
