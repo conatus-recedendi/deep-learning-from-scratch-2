@@ -47,13 +47,10 @@ def evaluate_analogy(csv_path: str, model_path: str, top_k: int = 5):
     semantic_correct = 0
     semantic_count = 0
 
-    i = 0
     with open(csv_path, newline="", encoding="utf-8") as csvfile:
         reader = csv.reader(csvfile)
 
         for row in reader:
-            i += 1
-            print(i)
             if len(row) < 6:
                 continue
 
@@ -101,17 +98,17 @@ def evaluate_analogy(csv_path: str, model_path: str, top_k: int = 5):
     # 출력
     print(f"모델 경로: {model_path}")
     print(
-        f"총 평가 수: {total_count}, 정확도: {total_correct / total_count * 100:.2f}%"
+        f"총 평가 수: {total_count}, 정확도: {total_correct / total_count * 100:.4f}%"
         if total_count
         else "평가할 데이터 없음"
     )
     print(
-        f"Syntactic: {syntactic_count}, 정확도: {syntactic_correct / syntactic_count * 100:.2f}%"
+        f"Syntactic: {syntactic_count}, 정확도: {syntactic_correct / syntactic_count * 100:.4f}%"
         if syntactic_count
         else "Syntactic 없음"
     )
     print(
-        f"Semantic: {semantic_count}, 정확도: {semantic_correct / semantic_count * 100:.2f}%"
+        f"Semantic: {semantic_count}, 정확도: {semantic_correct / semantic_count * 100:.4f}%"
         if semantic_count
         else "Semantic 없음"
     )
