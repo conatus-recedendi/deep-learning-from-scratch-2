@@ -86,12 +86,12 @@ trainer.fit(
     contexts, target, max_epoch=wandb.config.epochs, batch_size=wandb.config.batch_size
 )
 # trainer.plot()
-for i in range(len(model.loss_layers)):
-    print(f"loss_layer {i} : ", model.loss_layers[i].loss_cache)
-times = model.training_time()
-with open("train_loss.txt", "w") as f:
-    for layer, timing in times.items():
-        f.write(f"{layer}: {json.dumps(timing)}\n")
+# for i in range(len(model.loss_layers)):
+#     print(f"loss_layer {i} : ", model.loss_layers[i].loss_cache)
+# times = model.training_time()
+# with open("train_loss.txt", "w") as f:
+#     for layer, timing in times.items():
+#         f.write(f"{layer}: {json.dumps(timing)}\n")
 # 나중에 사용할 수 있도록 필요한 데이터 저장
 word_vecs = model.word_vecs
 if config.GPU:
