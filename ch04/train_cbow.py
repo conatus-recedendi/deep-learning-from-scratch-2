@@ -9,8 +9,8 @@ from common import config
 config.GPU = True
 # ===============================================
 import pickle
-from common.trainer_our import Trainer
-from common.optimizer_our import Adam
+from common.trainer import Trainer
+from common.optimizer import Adam
 from cbow import CBOW
 from skip_gram import SkipGram
 from common.util import create_contexts_target, to_cpu, to_gpu
