@@ -35,7 +35,7 @@ wandb.init(
             "hidden_size": 128,
             "wordvec_size": 16,
         },
-        "dataset": "addition",  # | "addition"
+        "dataset": "date",  # | "addition"
         "gpu": True,
         "baseline": True,
     },
