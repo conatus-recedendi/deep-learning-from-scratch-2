@@ -18,7 +18,7 @@ wandb.init(
     project="RNN",
     name="SimpleRNNLM",
     config={
-        "seed": 1000,
+        "seed": 2000,
         "gradient_descent": "SGD",
         "learning_rate": 0.1,
         "epochs": 100,
