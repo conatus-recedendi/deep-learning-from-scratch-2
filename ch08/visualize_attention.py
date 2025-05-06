@@ -38,7 +38,7 @@ def visualize(attention_map, row_labels, column_labels):
     global _idx
     _idx += 1
     plt.show()
-    plt.imsave("attention_" + _idx + "_addition.png")
+    plt.imsave("attention_" + str(_idx) + "_addition.png")
 
 
 for _ in range(5):
