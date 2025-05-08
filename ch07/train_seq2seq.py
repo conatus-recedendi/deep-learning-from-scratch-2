@@ -103,8 +103,15 @@ wandb_sweep_config = {
         "epochs": {"value": 25},
         "batch_size": {"value": 128},
         "model": {"value": "seq2seq"},
+        "max_grad": {"value": 0.25},
+        "is_reverse": {"value": False},
+        "is_peeky": {"value": False},
         "model_params": {
-            "value": {"hidden_size": 128, "wordvec_size": 16},
+            "values": [
+                {"hidden_size": 128, "wordvec_size": 16},
+                # {"hidden_size": 100, "window_size": 2},
+                # {"hidden_size": 100, "window_size": 3},
+            ]
         },
         "gpu": {"value": config.GPU},
         "dataset": {
