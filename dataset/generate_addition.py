@@ -8,7 +8,7 @@ def generate_addition_dataset(size: int, filename: str):
         b = random.randint(0, 999)
         result = a + b
         addition = f"{a}+{b}"
-        return f"{addition:<7}_{result}"
+        return f"{addition:<7}_{result:<5}"
 
     # 생성
     data = [random_addition() for _ in range(size)]
