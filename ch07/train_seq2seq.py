@@ -41,7 +41,7 @@ wandb.init(
 
 
 # 데이터셋 읽기
-(x_train, t_train), (x_test, t_test) = sequence.load_data("addition.txt")
+(x_train, t_train), (x_test, t_test) = sequence.load_data("addition_100K.txt")
 char_to_id, id_to_char = sequence.get_vocab()
 
 # 입력 반전 여부 설정 =============================================
