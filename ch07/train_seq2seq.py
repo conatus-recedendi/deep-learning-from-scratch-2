@@ -132,6 +132,6 @@ wandb_sweep_config = {
     },
 }
 
-sweep_id = wandb.sweep(sweep=wandb_sweep_config, project="Word2Vec")
+sweep_id = wandb.sweep(sweep=wandb_sweep_config, project="RNN")
 
 wandb.agent(sweep_id, function=run)
