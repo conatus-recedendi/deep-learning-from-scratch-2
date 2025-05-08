@@ -18,7 +18,7 @@ import wandb
 
 wandb.init(
     project="RNN",
-    name="seq2seq(reverse+peeky)",
+    name="seq2seq(100K)",
     config={
         "seed": 1000,
         "gradient_descent": "SGD",
@@ -27,13 +27,13 @@ wandb.init(
         "batch_size": 128,
         "model": "seq2seq",
         "max_grad": 0.25,
-        "is_reverse": True,
-        "is_peeky": True,
+        "is_reverse": False,
+        "is_peeky": False,
         "model_params": {
             "hidden_size": 128,
             "wordvec_size": 16,
         },
-        "dataset": "addition",
+        "dataset": "addition_100K",
         "gpu": True,
         "baseline": True,
     },
