@@ -16,91 +16,71 @@ from peeky_seq2seq import PeekySeq2seq
 import wandb
 
 
-wandb.init(
-    project="RNN",
-    name="seq2seq(100K)",
-    config={
-        "seed": 1000,
-        "gradient_descent": "SGD",
-        "learning_rate": 5.0,
-        "epochs": 25,
-        "batch_size": 128,
-        "model": "seq2seq",
-        "max_grad": 0.25,
-        "is_reverse": False,
-        "is_peeky": False,
-        "model_params": {
-            "hidden_size": 128,
-            "wordvec_size": 16,
-        },
-        "dataset": "addition_100K",
-        "gpu": True,
-        "baseline": True,
-    },
-)
+def run():
+    wandb.init()
 
+    # 데이터셋 읽기
+    (x_train, t_train), (x_test, t_test) = sequence.load_data("addition_100K.txt")
+    char_to_id, id_to_char = sequence.get_vocab()
 
-# 데이터셋 읽기
-(x_train, t_train), (x_test, t_test) = sequence.load_data("addition_100K.txt")
-char_to_id, id_to_char = sequence.get_vocab()
+    # 입력 반전 여부 설정 =============================================
+    is_reverse = wandb.config.is_reverse  # True
+    if is_reverse:
+        x_train, x_test = x_train[:, ::-1], x_test[:, ::-1]
+    # ================================================================
 
-# 입력 반전 여부 설정 =============================================
-is_reverse = wandb.config.is_reverse  # True
-if is_reverse:
-    x_train, x_test = x_train[:, ::-1], x_test[:, ::-1]
-# ================================================================
+    if config.GPU:
+        x_train, t_train = to_gpu(x_train), to_gpu(t_train)
+        x_test, t_test = to_gpu(x_test), to_gpu(t_test)
 
-if config.GPU:
-    x_train, t_train = to_gpu(x_train), to_gpu(t_train)
-    x_test, t_test = to_gpu(x_test), to_gpu(t_test)
+    # 하이퍼파라미터 설정
+    vocab_size = len(char_to_id)
 
-# 하이퍼파라미터 설정
-vocab_size = len(char_to_id)
+    # 일반 혹은 엿보기(Peeky) 설정 =====================================
+    if wandb.config.is_peeky:
+        model = PeekySeq2seq(
+            vocab_size,
+            wandb.config.model_params["wordvec_size"],
+            wandb.config.model_params["hidden_size"],
+        )
+    else:
+        model = Seq2seq(
+            vocab_size,
+            wandb.config.model_params["wordvec_size"],
+            wandb.config.model_params["hidden_size"],
+        )
+    # model = PeekySeq2seq(vocab_size, wordvec_size, hidden_size)
+    # ================================================================
+    optimizer = Adam()
+    trainer = Trainer(model, optimizer)
 
-# 일반 혹은 엿보기(Peeky) 설정 =====================================
-if wandb.config.is_peeky:
-    model = PeekySeq2seq(
-        vocab_size,
-        wandb.config.model_params["wordvec_size"],
-        wandb.config.model_params["hidden_size"],
-    )
-else:
-    model = Seq2seq(
-        vocab_size,
-        wandb.config.model_params["wordvec_size"],
-        wandb.config.model_params["hidden_size"],
-    )
-# model = PeekySeq2seq(vocab_size, wordvec_size, hidden_size)
-# ================================================================
-optimizer = Adam()
-trainer = Trainer(model, optimizer)
-
-acc_list = []
-for epoch in range(wandb.config.epochs):
-    trainer.fit(
-        x_train,
-        t_train,
-        max_epoch=1,
-        batch_size=wandb.config.batch_size,
-        max_grad=wandb.config.max_grad,
-    )
-
-    correct_num = 0
-    for i in range(len(x_test)):
-        question, correct = x_test[[i]], t_test[[i]]
-        verbose = i < 10
-        correct_num += eval_seq2seq(
-            model, question, correct, id_to_char, verbose, is_reverse
+    acc_list = []
+    for epoch in range(wandb.config.epochs):
+        trainer.fit(
+            x_train,
+            t_train,
+            max_epoch=1,
+            batch_size=wandb.config.batch_size,
+            max_grad=wandb.config.max_grad,
         )
 
-    acc = float(correct_num) / len(x_test)
-    acc_list.append(acc)
-    wandb.log(
-        {
-            "Test Accuracy": cast_to_single_value(acc * 100),
-        }
-    )
-    print("검증 정확도 %.3f%%" % (acc * 100))
+        correct_num = 0
+        for i in range(len(x_test)):
+            question, correct = x_test[[i]], t_test[[i]]
+            verbose = i < 10
+            correct_num += eval_seq2seq(
+                model, question, correct, id_to_char, verbose, is_reverse
+            )
+
+        acc = float(correct_num) / len(x_test)
+        acc_list.append(acc)
+        wandb.log(
+            {
+                "Test Accuracy": cast_to_single_value(acc * 100),
+            }
+        )
+        print("검증 정확도 %.3f%%" % (acc * 100))
+
 
 # 그래프 그리기
 # x = np.arange(len(acc_list))
@@ -109,3 +89,42 @@ for epoch in range(wandb.config.epochs):
 # plt.ylabel("정확도")
 # plt.ylim(0, 1.0)
 # plt.show()
+
+
+wandb_sweep_config = {
+    "name": "seq2seq",
+    "method": "grid",
+    "metric": {"name": "train_loss", "goal": "minimize"},
+    "parameters": {
+        "seed": {"value": 1000},
+        # "seed": {"value": 1000},
+        "gradient_descent": {"value": "SGD"},
+        "learning_rate": {"value": 5.0},
+        "epochs": {"value": 25},
+        "batch_size": {"value": 128},
+        "model": {"value": "seq2seq"},
+        "model_params": {
+            "value": {"hidden_size": 128, "wordvec_size": 16},
+        },
+        "gpu": {"value": config.GPU},
+        "dataset": {
+            "values": [
+                "addition_100K.txt",
+                "addition_250K.txt",
+                "addition_500K.txt",
+                "addition_1M.txt",
+            ]
+        },
+        "baseline": {"value": False},
+        # "batch_norm": {"value": False},
+        # "weight_decay_lambda": {"value": 0},
+        # "dataset": {"value": ""},
+        # "activation": {"value": "relu"},
+        # "weight_init_std": {"value": "he"},
+        # "dropout": {"value": 0.15},
+    },
+}
+
+sweep_id = wandb.sweep(sweep=wandb_sweep_config, project="Word2Vec")
+
+wandb.agent(sweep_id, function=run)
