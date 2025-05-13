@@ -171,7 +171,7 @@ wandb_sweep_config = {
         },
         "baseline": {"value": False},
         # "batch_norm": {"value": False},
-        "weight_decay_lambda": {"values": [0.3, 0.5, 0.7, 1.0, 1.5, 3.0, 5.0]},
+        "weight_decay_lambda": {"values": [0.0006, 0.001, 0.01, 0.1, 1]},
         # "dataset": {"value": ""},
         # "activation": {"value": "relu"},
         # "weight_init_std": {"value": "he"},
