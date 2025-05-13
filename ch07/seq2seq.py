@@ -110,7 +110,7 @@ class Seq2seq(BaseModel):
         loss = self.softmax.forward(score, decoder_ts)
         # L2 정규화
         for param in self.params:
-            loss += 1 / 2 * self.weight_decay * np.sum(param**2)
+            loss += 1.0 / 2.0 * self.weight_decay * np.sum(param**2)
         # L2 정규화의 기울기
 
         return loss
