@@ -108,14 +108,14 @@ def run():
             acc_list.append(acc)
 
             correct_num_train = 0
-            for i in range(min(len(x_train), len(x_test))):
+            for i in range(len(x_train)):
                 # print("train acc" + str(i))
                 question, correct = x_train[[i]], t_train[[i]]
                 verbose = i < 1
                 correct_num_train += eval_seq2seq(
                     model, question, correct, id_to_char, verbose, is_reverse
                 )
-            acc_train = float(correct_num_train) / min(len(x_train), len(x_test))
+            acc_train = float(correct_num_train) / len(x_train)
 
             wandb.log(
                 {
@@ -151,7 +151,7 @@ wandb_sweep_config = {
         "max_grad": {"value": 0.25},
         "is_reverse": {"value": False},
         "is_peeky": {"value": False},
-        "by_digit": {"values": [False, True]},
+        "by_digit": {"values": [False]},
         "eval_interval": {"value": 100},
         "model_params": {
             "values": [
