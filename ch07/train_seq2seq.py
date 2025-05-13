@@ -152,6 +152,7 @@ wandb_sweep_config = {
         "is_reverse": {"value": False},
         "is_peeky": {"value": False},
         "by_digit": {"values": [False, True]},
+        "eval_interval": {"value": 100},
         "model_params": {
             "values": [
                 {"hidden_size": 128, "wordvec_size": 16},
