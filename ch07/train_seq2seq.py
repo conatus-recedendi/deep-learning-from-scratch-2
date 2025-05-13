@@ -97,7 +97,7 @@ def run():
         acc_list.append(acc)
 
         correct_num_train = 0
-        for i in range(len(x_train)):
+        for i in range(max(len(x_train), len(x_test))):
             question, correct = x_train[[i]], t_train[[i]]
             verbose = i < 10
             correct_num_train += eval_seq2seq(
@@ -129,7 +129,7 @@ wandb_sweep_config = {
     "method": "grid",
     "metric": {"name": "train_loss", "goal": "minimize"},
     "parameters": {
-        "seed": {"value": [1000, 2000, 3000]},
+        "seed": {"values": [1000, 2000, 3000]},
         # "seed": {"value": 1000},
         "gradient_descent": {"value": "SGD"},
         "learning_rate": {"value": 5.0},
