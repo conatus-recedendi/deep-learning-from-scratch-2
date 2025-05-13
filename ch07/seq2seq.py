@@ -108,6 +108,8 @@ class Seq2seq(BaseModel):
         h = self.encoder.forward(xs)
         score = self.decoder.forward(decoder_xs, h)
         loss = self.softmax.forward(score, decoder_ts)
+        origin_loss = loss
+
         # L2 정규화
         for param in self.params:
             param = np.asarray(param)
@@ -115,7 +117,7 @@ class Seq2seq(BaseModel):
             # print(type(self.weight_decay))
             loss += 1.0 / 2.0 * self.weight_decay * np.sum(param**2)
         # L2 정규화의 기울기
-
+        print(origin_loss / loss)
         return loss
 
     def backward(self, dout=1):
