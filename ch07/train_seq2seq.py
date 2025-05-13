@@ -68,10 +68,10 @@ def run():
             max_grad=wandb.config.max_grad,
         )
 
-        max_iters = len(x_test) // wandb.config.batch_size
+        max_iters = len(x_test) // wandb.config.batch_size  # max_iter should be more 1
         total_loss = 0
         total_count = 0
-        for iters in range(max_iters):
+        for iters in range(max(max_iters, 1)):
             # print("test loss" + str(iters))
             batch_x = x_test[
                 iters * wandb.config.batch_size : (iters + 1) * wandb.config.batch_size

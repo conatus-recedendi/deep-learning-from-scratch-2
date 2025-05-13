@@ -111,8 +111,8 @@ class Seq2seq(BaseModel):
         # L2 정규화
         for param in self.params:
             param = np.asarray(param)
-            print(self.weight_decay)
-            print(type(self.weight_decay))
+            # print(self.weight_decay)
+            # print(type(self.weight_decay))
             loss += 1.0 / 2.0 * self.weight_decay * np.sum(param**2)
         # L2 정규화의 기울기
 
