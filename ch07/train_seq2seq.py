@@ -99,7 +99,7 @@ def run():
         acc_list.append(acc)
 
         correct_num_train = 0
-        for i in range(max(len(x_train), len(x_test))):
+        for i in range(min(len(x_train), len(x_test))):
             print("train acc" + str(i))
             question, correct = x_train[[i]], t_train[[i]]
             verbose = i < 10
