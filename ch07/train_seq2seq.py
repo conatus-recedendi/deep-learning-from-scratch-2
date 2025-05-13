@@ -115,7 +115,7 @@ def run():
                 correct_num_train += eval_seq2seq(
                     model, question, correct, id_to_char, verbose, is_reverse
                 )
-            acc_train = float(correct_num_train) / len(min(len(x_train), len(x_test)))
+            acc_train = float(correct_num_train) / min(len(x_train), len(x_test))
 
             wandb.log(
                 {
