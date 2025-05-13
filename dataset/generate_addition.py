@@ -26,7 +26,13 @@ def generate_addition_dataset(size: int, filename: str):
 output_dir = Path("./")
 output_dir.mkdir(exist_ok=True)
 
-sizes = {"100K": 100_000, "250K": 250_000, "500K": 500_000, "1M": 1_000_000}
+sizes = {
+    "100K": 100_000,
+    "250K": 250_000,
+    "500K": 500_000,
+    "1M": 1_000_000,
+    "1K": 1_000,
+}
 
 for label, size in sizes.items():
     generate_addition_dataset(size, output_dir / f"addition_{label}.txt")

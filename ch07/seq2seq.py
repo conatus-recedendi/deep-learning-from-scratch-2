@@ -1,6 +1,7 @@
 # coding: utf-8
 import sys
-sys.path.append('..')
+
+sys.path.append("..")
 from common.time_layers import *
 from common.base_model import BaseModel
 
@@ -10,10 +11,10 @@ class Encoder:
         V, D, H = vocab_size, wordvec_size, hidden_size
         rn = np.random.randn
 
-        embed_W = (rn(V, D) / 100).astype('f')
-        lstm_Wx = (rn(D, 4 * H) / np.sqrt(D)).astype('f')
-        lstm_Wh = (rn(H, 4 * H) / np.sqrt(H)).astype('f')
-        lstm_b = np.zeros(4 * H).astype('f')
+        embed_W = (rn(V, D) / 100).astype("f")
+        lstm_Wx = (rn(D, 4 * H) / np.sqrt(D)).astype("f")
+        lstm_Wh = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+        lstm_b = np.zeros(4 * H).astype("f")
 
         self.embed = TimeEmbedding(embed_W)
         self.lstm = TimeLSTM(lstm_Wx, lstm_Wh, lstm_b, stateful=False)
@@ -42,12 +43,12 @@ class Decoder:
         V, D, H = vocab_size, wordvec_size, hidden_size
         rn = np.random.randn
 
-        embed_W = (rn(V, D) / 100).astype('f')
-        lstm_Wx = (rn(D, 4 * H) / np.sqrt(D)).astype('f')
-        lstm_Wh = (rn(H, 4 * H) / np.sqrt(H)).astype('f')
-        lstm_b = np.zeros(4 * H).astype('f')
-        affine_W = (rn(H, V) / np.sqrt(H)).astype('f')
-        affine_b = np.zeros(V).astype('f')
+        embed_W = (rn(V, D) / 100).astype("f")
+        lstm_Wx = (rn(D, 4 * H) / np.sqrt(D)).astype("f")
+        lstm_Wh = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
+        lstm_b = np.zeros(4 * H).astype("f")
+        affine_W = (rn(H, V) / np.sqrt(H)).astype("f")
+        affine_b = np.zeros(V).astype("f")
 
         self.embed = TimeEmbedding(embed_W)
         self.lstm = TimeLSTM(lstm_Wx, lstm_Wh, lstm_b, stateful=True)
@@ -91,7 +92,8 @@ class Decoder:
 
 
 class Seq2seq(BaseModel):
-    def __init__(self, vocab_size, wordvec_size, hidden_size):
+    def __init__(self, vocab_size, wordvec_size, hidden_size, weight_decay):
+        self.weight_decay = weight_decay
         V, D, H = vocab_size, wordvec_size, hidden_size
         self.encoder = Encoder(V, D, H)
         self.decoder = Decoder(V, D, H)
@@ -106,6 +108,11 @@ class Seq2seq(BaseModel):
         h = self.encoder.forward(xs)
         score = self.decoder.forward(decoder_xs, h)
         loss = self.softmax.forward(score, decoder_ts)
+        # L2 정규화
+        for param in self.params:
+            loss += 1 / 2 * self.weight_decay * np.sum(param**2)
+        # L2 정규화의 기울기
+
         return loss
 
     def backward(self, dout=1):

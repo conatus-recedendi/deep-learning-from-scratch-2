@@ -17,12 +17,12 @@ import wandb
 
 
 def run():
-    wandb.init()
+    wandb.init({"name": "seq2seq addition"})
 
     np.random.seed(wandb.config.seed)
     # 데이터셋 읽기
 
-    (x_train, t_train), (x_test, t_test) = sequence.load_data("addition_100K.txt")
+    (x_train, t_train), (x_test, t_test) = sequence.load_data("addition_1K.txt")
     char_to_id, id_to_char = sequence.get_vocab()
 
     by_digit = wandb.config.by_digit
@@ -51,10 +51,11 @@ def run():
             vocab_size,
             wandb.config.model_params["wordvec_size"],
             wandb.config.model_params["hidden_size"],
+            weight_decay=wandb.config.weight_decay_lambda,
         )
     # model = PeekySeq2seq(vocab_size, wordvec_size, hidden_size)
     # ================================================================
-    optimizer = Adam()
+    optimizer = Adam(lr=wandb.config.learning_rate)
     trainer = Trainer(model, optimizer)
 
     acc_list = []
@@ -66,21 +67,6 @@ def run():
             batch_size=wandb.config.batch_size,
             max_grad=wandb.config.max_grad,
         )
-
-        correct_num = 0
-        for i in range(len(x_test)):
-            # print("test acc" + str(i))
-            question, correct = x_test[[i]], t_test[[i]]
-            verbose = i < 1
-            correct_num += eval_seq2seq(
-                model,
-                question,
-                correct,
-                id_to_char,
-                verbose,
-                is_reverse,
-                by_digit,
-            )
 
         max_iters = len(x_test) // wandb.config.batch_size
         total_loss = 0
@@ -96,28 +82,49 @@ def run():
             total_loss += model.forward(batch_x, batch_t)
             total_count += 1
         loss_test = total_loss / total_count
-
-        acc = float(correct_num) / len(x_test)
-        acc_list.append(acc)
-
-        correct_num_train = 0
-        for i in range(min(len(x_train), len(x_test))):
-            # print("train acc" + str(i))
-            question, correct = x_train[[i]], t_train[[i]]
-            verbose = i < 1
-            correct_num_train += eval_seq2seq(
-                model, question, correct, id_to_char, verbose, is_reverse
-            )
-        acc_train = float(correct_num_train) / len(x_train)
-
         wandb.log(
             {
-                "Test Accuracy": cast_to_single_value(acc * 100),
-                "Train Accuracy": cast_to_single_value(acc_train * 100),
                 "Test Loss": cast_to_single_value(loss_test),
             }
         )
-        print("검증 정확도 %.3f%%" % (acc * 100))
+
+        if (epoch + 1) % wandb.config.eval_interval == 0:
+            correct_num = 0
+            for i in range(len(x_test)):
+                # print("test acc" + str(i))
+                question, correct = x_test[[i]], t_test[[i]]
+                verbose = i < 1
+                correct_num += eval_seq2seq(
+                    model,
+                    question,
+                    correct,
+                    id_to_char,
+                    verbose,
+                    is_reverse,
+                    by_digit,
+                )
+
+            acc = float(correct_num) / len(x_test)
+            acc_list.append(acc)
+
+            correct_num_train = 0
+            for i in range(min(len(x_train), len(x_test))):
+                # print("train acc" + str(i))
+                question, correct = x_train[[i]], t_train[[i]]
+                verbose = i < 1
+                correct_num_train += eval_seq2seq(
+                    model, question, correct, id_to_char, verbose, is_reverse
+                )
+            acc_train = float(correct_num_train) / len(min(len(x_train), len(x_test)))
+
+            wandb.log(
+                {
+                    "Test Accuracy": cast_to_single_value(acc * 100),
+                    "Train Accuracy": cast_to_single_value(acc_train * 100),
+                    # "Test Loss": cast_to_single_value(loss_test),
+                }
+            )
+            print("검증 정확도 %.3f%%" % (acc * 100))
 
 
 # 그래프 그리기
@@ -134,11 +141,11 @@ wandb_sweep_config = {
     "method": "grid",
     "metric": {"name": "train_loss", "goal": "minimize"},
     "parameters": {
-        "seed": {"values": [1000, 2000, 3000]},
+        "seed": {"values": [1000]},
         # "seed": {"value": 1000},
-        "gradient_descent": {"value": "SGD"},
-        "learning_rate": {"value": 5.0},
-        "epochs": {"value": 100},
+        "gradient_descent": {"value": "Adam"},
+        "learning_rate": {"value": 0.001},
+        "epochs": {"value": 50_000},
         "batch_size": {"value": 128},
         "model": {"value": "seq2seq"},
         "max_grad": {"value": 0.25},
@@ -155,7 +162,7 @@ wandb_sweep_config = {
         "gpu": {"value": config.GPU},
         "dataset": {
             "values": [
-                "addition_100K.txt",
+                "addition_1K.txt",
                 # "addition_250K.txt",
                 # "addition_500K.txt",
                 # "addition_1M.txt",
@@ -163,7 +170,7 @@ wandb_sweep_config = {
         },
         "baseline": {"value": False},
         # "batch_norm": {"value": False},
-        # "weight_decay_lambda": {"value": 0},
+        "weight_decay_lambda": {"value": [0.3, 0.5, 0.7, 1.0, 1.5, 3.0, 5.0]},
         # "dataset": {"value": ""},
         # "activation": {"value": "relu"},
         # "weight_init_std": {"value": "he"},
