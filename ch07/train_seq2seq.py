@@ -17,7 +17,7 @@ import wandb
 
 
 def run():
-    wandb.init({"name": "seq2seq addition"})
+    wandb.init(name="seq2seq addition")
 
     np.random.seed(wandb.config.seed)
     # 데이터셋 읽기
