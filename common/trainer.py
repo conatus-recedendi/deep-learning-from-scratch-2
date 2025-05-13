@@ -22,7 +22,7 @@ class Trainer:
     def fit(self, x, t, max_epoch=10, batch_size=32, max_grad=None, eval_interval=20):
         data_size = len(x)
         max_iters = data_size // batch_size
-        print(data_size, batch_size, max_iters)
+        # print(data_size, batch_size, max_iters)
         self.eval_interval = eval_interval
         model, optimizer = self.model, self.optimizer
         total_loss = 0
@@ -74,7 +74,7 @@ class Trainer:
 
             self.current_epoch += 1
             avg_loss = all_loss / (all_count + 1e-7)
-            print(avg_loss, all_loss, all_count)
+            # print(avg_loss, all_loss, all_count)
             wandb.log(
                 {
                     "train_loss": cast_to_single_value(avg_loss),
