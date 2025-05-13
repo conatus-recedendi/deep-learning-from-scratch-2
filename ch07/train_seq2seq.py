@@ -23,6 +23,7 @@ def run():
     (x_train, t_train), (x_test, t_test) = sequence.load_data("addition_100K.txt")
     char_to_id, id_to_char = sequence.get_vocab()
 
+    by_digit = wandb.config.by_digit
     # 입력 반전 여부 설정 =============================================
     is_reverse = wandb.config.is_reverse  # True
     if is_reverse:
@@ -69,14 +70,46 @@ def run():
             question, correct = x_test[[i]], t_test[[i]]
             verbose = i < 10
             correct_num += eval_seq2seq(
-                model, question, correct, id_to_char, verbose, is_reverse
+                model,
+                question,
+                correct,
+                id_to_char,
+                verbose,
+                is_reverse,
+                by_digit,
             )
+
+        max_iters = len(x_test) // wandb.config.batch_size
+        total_loss = 0
+        total_count = 0
+        for iters in range(max_iters):
+            batch_x = x_test[
+                iters * wandb.config.batch_size : (iters + 1) * wandb.config.batch_size
+            ]
+            batch_t = t_test[
+                iters * wandb.config.batch_size : (iters + 1) * wandb.config.batch_size
+            ]
+            total_loss += model.forward(batch_x, batch_t)
+            total_count += 1
+        loss_test = total_loss / total_count
 
         acc = float(correct_num) / len(x_test)
         acc_list.append(acc)
+
+        correct_num_train = 0
+        for i in range(len(x_train)):
+            question, correct = x_train[[i]], t_train[[i]]
+            verbose = i < 10
+            correct_num_train += eval_seq2seq(
+                model, question, correct, id_to_char, verbose, is_reverse
+            )
+        acc_train = float(correct_num_train) / len(x_train)
+
         wandb.log(
             {
                 "Test Accuracy": cast_to_single_value(acc * 100),
+                "Train Accuracy": cast_to_single_value(acc_train * 100),
+                "Test Loss": cast_to_single_value(loss_test),
             }
         )
         print("검증 정확도 %.3f%%" % (acc * 100))
@@ -96,16 +129,17 @@ wandb_sweep_config = {
     "method": "grid",
     "metric": {"name": "train_loss", "goal": "minimize"},
     "parameters": {
-        "seed": {"value": 1000},
+        "seed": {"value": [1000, 2000, 3000]},
         # "seed": {"value": 1000},
         "gradient_descent": {"value": "SGD"},
         "learning_rate": {"value": 5.0},
-        "epochs": {"value": 25},
+        "epochs": {"value": 100},
         "batch_size": {"value": 128},
         "model": {"value": "seq2seq"},
         "max_grad": {"value": 0.25},
         "is_reverse": {"value": False},
         "is_peeky": {"value": False},
+        "by_digit": {"values": [False, True]},
         "model_params": {
             "values": [
                 {"hidden_size": 128, "wordvec_size": 16},
@@ -117,9 +151,9 @@ wandb_sweep_config = {
         "dataset": {
             "values": [
                 "addition_100K.txt",
-                "addition_250K.txt",
-                "addition_500K.txt",
-                "addition_1M.txt",
+                # "addition_250K.txt",
+                # "addition_500K.txt",
+                # "addition_1M.txt",
             ]
         },
         "baseline": {"value": False},

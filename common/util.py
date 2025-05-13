@@ -230,7 +230,9 @@ def eval_perplexity(model, corpus, batch_size=10, time_size=35):
     return ppl
 
 
-def eval_seq2seq(model, question, correct, id_to_char, verbos=False, is_reverse=False):
+def eval_seq2seq(
+    model, question, correct, id_to_char, verbos=False, is_reverse=False, by_digit=False
+):
     correct = correct.flatten()
     # 머릿글자
     start_id = correct[0]
@@ -264,6 +266,16 @@ def eval_seq2seq(model, question, correct, id_to_char, verbos=False, is_reverse=
             print(mark + " " + guess)
         print("---")
 
+    def string_accuracy(pred: str, gold: str) -> float:
+        # 길이가 다르면 정확도 0
+        if len(pred) != len(gold):
+            return 0.0
+        # 자리별 비교
+        correct = sum(p == g for p, g in zip(pred, gold))
+        return correct / len(gold)
+
+    if by_digit:
+        return string_accuracy(guess, correct)
     return 1 if guess == correct else 0
 
 
