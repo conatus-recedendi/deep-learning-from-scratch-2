@@ -110,7 +110,8 @@ class Seq2seq(BaseModel):
         loss = self.softmax.forward(score, decoder_ts)
 
         for grads, param in zip(self.grads, self.params):
-            grads += self.weight_decay * param
+            # grads += self.weight_decay * param
+            grads[:] = grads + self.weight_decay * param
             loss += 1.0 / 2.0 * self.weight_decay * np.sum(param**2)
 
         return loss
