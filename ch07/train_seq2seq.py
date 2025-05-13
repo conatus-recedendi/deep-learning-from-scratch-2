@@ -71,7 +71,7 @@ def run():
         for i in range(len(x_test)):
             # print("test acc" + str(i))
             question, correct = x_test[[i]], t_test[[i]]
-            verbose = i < 10
+            verbose = i < 1
             correct_num += eval_seq2seq(
                 model,
                 question,
@@ -104,7 +104,7 @@ def run():
         for i in range(min(len(x_train), len(x_test))):
             # print("train acc" + str(i))
             question, correct = x_train[[i]], t_train[[i]]
-            verbose = i < 10
+            verbose = i < 1
             correct_num_train += eval_seq2seq(
                 model, question, correct, id_to_char, verbose, is_reverse
             )
