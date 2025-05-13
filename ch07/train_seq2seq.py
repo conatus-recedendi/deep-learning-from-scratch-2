@@ -67,6 +67,7 @@ def run():
 
         correct_num = 0
         for i in range(len(x_test)):
+            print("test acc" + str(i))
             question, correct = x_test[[i]], t_test[[i]]
             verbose = i < 10
             correct_num += eval_seq2seq(
@@ -83,6 +84,7 @@ def run():
         total_loss = 0
         total_count = 0
         for iters in range(max_iters):
+            print("test loss" + str(iters))
             batch_x = x_test[
                 iters * wandb.config.batch_size : (iters + 1) * wandb.config.batch_size
             ]
@@ -98,6 +100,7 @@ def run():
 
         correct_num_train = 0
         for i in range(max(len(x_train), len(x_test))):
+            print("train acc" + str(i))
             question, correct = x_train[[i]], t_train[[i]]
             verbose = i < 10
             correct_num_train += eval_seq2seq(
