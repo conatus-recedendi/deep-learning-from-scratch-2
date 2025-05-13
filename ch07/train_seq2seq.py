@@ -19,7 +19,9 @@ import wandb
 def run():
     wandb.init()
 
+    np.random.seed(wandb.config.seed)
     # 데이터셋 읽기
+
     (x_train, t_train), (x_test, t_test) = sequence.load_data("addition_100K.txt")
     char_to_id, id_to_char = sequence.get_vocab()
 
@@ -67,7 +69,7 @@ def run():
 
         correct_num = 0
         for i in range(len(x_test)):
-            print("test acc" + str(i))
+            # print("test acc" + str(i))
             question, correct = x_test[[i]], t_test[[i]]
             verbose = i < 10
             correct_num += eval_seq2seq(
@@ -84,7 +86,7 @@ def run():
         total_loss = 0
         total_count = 0
         for iters in range(max_iters):
-            print("test loss" + str(iters))
+            # print("test loss" + str(iters))
             batch_x = x_test[
                 iters * wandb.config.batch_size : (iters + 1) * wandb.config.batch_size
             ]
@@ -100,7 +102,7 @@ def run():
 
         correct_num_train = 0
         for i in range(min(len(x_train), len(x_test))):
-            print("train acc" + str(i))
+            # print("train acc" + str(i))
             question, correct = x_train[[i]], t_train[[i]]
             verbose = i < 10
             correct_num_train += eval_seq2seq(
